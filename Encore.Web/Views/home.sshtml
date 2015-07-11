@@ -1,0 +1,42 @@
+﻿@Master['master'];
+
+@Section['content']
+
+<div id="homePage">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">Recently Requested Reports</h2>
+				</div>
+				<table class="table table-hover table-bordered table-striped">
+					<thead>
+						<tr class="columns">
+							<th class="header">Report Name</th>
+							<th class="header">Request Date</th>
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: recentResults">
+						<tr class="table-data-row">
+							<td><a class="select-item" data-bind="text: $data.ReportName, attr: { href: 'reports/results/' + $data.ResultId }"></a></td>
+							<td data-bind="text: $data.RequestDate"></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr data-bind="if: recentResults().length == 0">
+							<td colspan='2'>
+								<div class="text-center">
+									<span>No Results Found</span>
+								</div>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>	
+		</div>
+	</div>	
+
+	<script type="text/javascript" src="\Content\viewmodels\home.js"></script>
+</div>
+
+@EndSection

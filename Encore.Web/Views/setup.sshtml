@@ -1,0 +1,50 @@
+@Master['master'];
+
+@Section['content']
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+				<h2 class="panel-title">Sites</h2>
+			</div>
+            <div class="panel-body">					
+				<div id="listView">
+					@Partial['includes/_knockoutTableTemplate.html'];
+				</div>
+            </div>
+        </div>
+		<div id="setupActions" class="panel panel-default">
+            <div class="panel-heading">
+				<h2 class="panel-title">Actions</h2>
+			</div>
+            <div class="panel-body">				
+				<div class="row">
+					<div class="col-sm-12">
+						<span id="uploadSitesButton" class="btn btn-primary btn-file">
+							<span class="glyphicon glyphicon-upload"></span>
+							<span> Upload Sites</span>
+							<input type="file" accept=".csv" multiple="false" data-bind="event: { change: function() { if($element.files[0]){ UploadSites($element.files[0]); $element.value = null;}}}"/>
+						</span>
+ 						<button id="syncSummaryDataButton" type="button" class="btn btn-primary" data-bind="click: SyncSummaries" >
+							<span class="glyphicon glyphicon-refresh"></span> Refresh Project Summary Data
+						</button>
+						<button id="syncFieldDataButton" type="button" class="btn btn-primary" data-bind="click: SyncFields" >
+							<span class="glyphicon glyphicon-refresh"></span> Refresh Field Data
+						</button>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+@Partial['includes/BackButton.sshtml'];
+
+<script type="text/javascript">
+require(['knockout', 'setup'],
+    function(ko, setup) {		
+		setup.Initialise();
+});
+</script>
+
+@EndSection

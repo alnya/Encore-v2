@@ -1,0 +1,10 @@
+﻿Hello [name]
+
+You recently requested data from Encore. 
+Your data are now ready to download.
+
+Please click [link] to view and download the data
+
+ENCORE
+
+If you need to reply to this email, contact blah@blah.com

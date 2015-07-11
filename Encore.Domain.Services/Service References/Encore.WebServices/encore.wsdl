@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://encore.ceh.ac.uk/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://encore.ceh.ac.uk/AbstractTypes" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://encore.ceh.ac.uk/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://encore.ceh.ac.uk/">
+      <s:element name="HelloWorld">
+        <s:complexType />
+      </s:element>
+      <s:element name="HelloWorldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSites">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetSitesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSitesResult" type="tns:ArrayOfSite" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfSite">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Site" type="tns:Site" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Site">
+        <s:attribute name="ID" type="s:int" use="required" />
+        <s:attribute name="Name" type="s:string" />
+      </s:complexType>
+      <s:element name="GetFields">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetFieldsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFieldsResult" type="tns:ArrayOfField" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfField">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Field" type="tns:Field" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Field">
+        <s:attribute name="ID" type="s:int" use="required" />
+        <s:attribute name="Name" type="s:string" />
+        <s:attribute name="Unit" type="s:string" />
+        <s:attribute name="DataType" type="s:string" />
+      </s:complexType>
+      <s:element name="GetSummary">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetSummaryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSummaryResult" type="tns:ArrayOfFieldDataSummary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfFieldDataSummary">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="FieldDataSummary" type="tns:FieldDataSummary" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FieldDataSummary">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="NumberOfRows" type="tns:ArrayOfFieldValue" />
+        </s:sequence>
+        <s:attribute name="SiteID" type="s:int" use="required" />
+        <s:attribute name="MinDate" type="s:dateTime" use="required" />
+        <s:attribute name="MaxDate" type="s:dateTime" use="required" />
+      </s:complexType>
+      <s:complexType name="ArrayOfFieldValue">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="FieldValue" type="tns:FieldValue" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FieldValue">
+        <s:attribute name="FieldID" type="s:int" use="required" />
+        <s:attribute name="Value" type="s:string" />
+      </s:complexType>
+      <s:element name="GetData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fields" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="sites" type="tns:ArrayOfInt" />
+            <s:element minOccurs="1" maxOccurs="1" name="datefrom" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="dateto" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfInt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="int" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetDataResult" type="tns:DataPackage" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DataPackage">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Rows" type="tns:ArrayOfDataPackageRow" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDataPackageRow">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DataPackageRow" type="tns:DataPackageRow" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DataPackageRow">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Values" type="tns:ArrayOfFieldValue" />
+        </s:sequence>
+        <s:attribute name="RowDate" type="s:dateTime" use="required" />
+        <s:attribute name="SiteID" type="s:int" use="required" />
+      </s:complexType>
+      <s:element name="TestGetData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="field" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="site" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="datefrom" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="dateto" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TestGetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="TestGetDataResult" type="tns:DataPackage" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="ArrayOfSite" nillable="true" type="tns:ArrayOfSite" />
+      <s:element name="ArrayOfField" nillable="true" type="tns:ArrayOfField" />
+      <s:element name="ArrayOfFieldDataSummary" nillable="true" type="tns:ArrayOfFieldDataSummary" />
+      <s:element name="DataPackage" type="tns:DataPackage" />
+    </s:schema>
+    <s:schema targetNamespace="http://encore.ceh.ac.uk/AbstractTypes">
+      <s:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <s:complexType name="StringArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="String" type="s:string" />
+            </s:sequence>
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HelloWorldSoapIn">
+    <wsdl:part name="parameters" element="tns:HelloWorld" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldSoapOut">
+    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSites" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSitesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFieldsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFields" />
+  </wsdl:message>
+  <wsdl:message name="GetFieldsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFieldsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSummarySoapIn">
+    <wsdl:part name="parameters" element="tns:GetSummary" />
+  </wsdl:message>
+  <wsdl:message name="GetSummarySoapOut">
+    <wsdl:part name="parameters" element="tns:GetSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:GetData" />
+  </wsdl:message>
+  <wsdl:message name="GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TestGetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:TestGetData" />
+  </wsdl:message>
+  <wsdl:message name="TestGetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:TestGetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldHttpGetIn" />
+  <wsdl:message name="HelloWorldHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesHttpGetIn" />
+  <wsdl:message name="GetSitesHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfSite" />
+  </wsdl:message>
+  <wsdl:message name="GetFieldsHttpGetIn" />
+  <wsdl:message name="GetFieldsHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfField" />
+  </wsdl:message>
+  <wsdl:message name="GetSummaryHttpGetIn" />
+  <wsdl:message name="GetSummaryHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfFieldDataSummary" />
+  </wsdl:message>
+  <wsdl:message name="GetDataHttpGetIn">
+    <wsdl:part name="fields" type="s1:StringArray" />
+    <wsdl:part name="sites" type="s1:StringArray" />
+    <wsdl:part name="datefrom" type="s:string" />
+    <wsdl:part name="dateto" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDataHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataPackage" />
+  </wsdl:message>
+  <wsdl:message name="TestGetDataHttpGetIn">
+    <wsdl:part name="field" type="s:string" />
+    <wsdl:part name="site" type="s:string" />
+    <wsdl:part name="datefrom" type="s:string" />
+    <wsdl:part name="dateto" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TestGetDataHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataPackage" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldHttpPostIn" />
+  <wsdl:message name="HelloWorldHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesHttpPostIn" />
+  <wsdl:message name="GetSitesHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfSite" />
+  </wsdl:message>
+  <wsdl:message name="GetFieldsHttpPostIn" />
+  <wsdl:message name="GetFieldsHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfField" />
+  </wsdl:message>
+  <wsdl:message name="GetSummaryHttpPostIn" />
+  <wsdl:message name="GetSummaryHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfFieldDataSummary" />
+  </wsdl:message>
+  <wsdl:message name="GetDataHttpPostIn">
+    <wsdl:part name="fields" type="s1:StringArray" />
+    <wsdl:part name="sites" type="s1:StringArray" />
+    <wsdl:part name="datefrom" type="s:string" />
+    <wsdl:part name="dateto" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDataHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataPackage" />
+  </wsdl:message>
+  <wsdl:message name="TestGetDataHttpPostIn">
+    <wsdl:part name="field" type="s:string" />
+    <wsdl:part name="site" type="s:string" />
+    <wsdl:part name="datefrom" type="s:string" />
+    <wsdl:part name="dateto" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TestGetDataHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataPackage" />
+  </wsdl:message>
+  <wsdl:portType name="encoreSoap">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldSoapIn" />
+      <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <wsdl:input message="tns:GetSitesSoapIn" />
+      <wsdl:output message="tns:GetSitesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFields">
+      <wsdl:input message="tns:GetFieldsSoapIn" />
+      <wsdl:output message="tns:GetFieldsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSummary">
+      <wsdl:input message="tns:GetSummarySoapIn" />
+      <wsdl:output message="tns:GetSummarySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <wsdl:input message="tns:GetDataSoapIn" />
+      <wsdl:output message="tns:GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TestGetData">
+      <wsdl:input message="tns:TestGetDataSoapIn" />
+      <wsdl:output message="tns:TestGetDataSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="encoreHttpGet">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldHttpGetIn" />
+      <wsdl:output message="tns:HelloWorldHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <wsdl:input message="tns:GetSitesHttpGetIn" />
+      <wsdl:output message="tns:GetSitesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFields">
+      <wsdl:input message="tns:GetFieldsHttpGetIn" />
+      <wsdl:output message="tns:GetFieldsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSummary">
+      <wsdl:input message="tns:GetSummaryHttpGetIn" />
+      <wsdl:output message="tns:GetSummaryHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <wsdl:input message="tns:GetDataHttpGetIn" />
+      <wsdl:output message="tns:GetDataHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TestGetData">
+      <wsdl:input message="tns:TestGetDataHttpGetIn" />
+      <wsdl:output message="tns:TestGetDataHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="encoreHttpPost">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldHttpPostIn" />
+      <wsdl:output message="tns:HelloWorldHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <wsdl:input message="tns:GetSitesHttpPostIn" />
+      <wsdl:output message="tns:GetSitesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFields">
+      <wsdl:input message="tns:GetFieldsHttpPostIn" />
+      <wsdl:output message="tns:GetFieldsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSummary">
+      <wsdl:input message="tns:GetSummaryHttpPostIn" />
+      <wsdl:output message="tns:GetSummaryHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <wsdl:input message="tns:GetDataHttpPostIn" />
+      <wsdl:output message="tns:GetDataHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TestGetData">
+      <wsdl:input message="tns:TestGetDataHttpPostIn" />
+      <wsdl:output message="tns:TestGetDataHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="encoreSoap" type="tns:encoreSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap:operation soapAction="http://encore.ceh.ac.uk/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <soap:operation soapAction="http://encore.ceh.ac.uk/GetSites" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFields">
+      <soap:operation soapAction="http://encore.ceh.ac.uk/GetFields" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSummary">
+      <soap:operation soapAction="http://encore.ceh.ac.uk/GetSummary" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <soap:operation soapAction="http://encore.ceh.ac.uk/GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestGetData">
+      <soap:operation soapAction="http://encore.ceh.ac.uk/TestGetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="encoreSoap12" type="tns:encoreSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap12:operation soapAction="http://encore.ceh.ac.uk/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <soap12:operation soapAction="http://encore.ceh.ac.uk/GetSites" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFields">
+      <soap12:operation soapAction="http://encore.ceh.ac.uk/GetFields" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSummary">
+      <soap12:operation soapAction="http://encore.ceh.ac.uk/GetSummary" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <soap12:operation soapAction="http://encore.ceh.ac.uk/GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestGetData">
+      <soap12:operation soapAction="http://encore.ceh.ac.uk/TestGetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="encoreHttpGet" type="tns:encoreHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="HelloWorld">
+      <http:operation location="/HelloWorld" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <http:operation location="/GetSites" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFields">
+      <http:operation location="/GetFields" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSummary">
+      <http:operation location="/GetSummary" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <http:operation location="/GetData" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestGetData">
+      <http:operation location="/TestGetData" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="encoreHttpPost" type="tns:encoreHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="HelloWorld">
+      <http:operation location="/HelloWorld" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <http:operation location="/GetSites" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFields">
+      <http:operation location="/GetFields" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSummary">
+      <http:operation location="/GetSummary" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <http:operation location="/GetData" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestGetData">
+      <http:operation location="/TestGetData" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="encore">
+    <wsdl:port name="encoreSoap" binding="tns:encoreSoap">
+      <soap:address location="http://neudev.ceh.ac.uk/encore/encore.asmx" />
+    </wsdl:port>
+    <wsdl:port name="encoreSoap12" binding="tns:encoreSoap12">
+      <soap12:address location="http://neudev.ceh.ac.uk/encore/encore.asmx" />
+    </wsdl:port>
+    <wsdl:port name="encoreHttpGet" binding="tns:encoreHttpGet">
+      <http:address location="http://neudev.ceh.ac.uk/encore/encore.asmx" />
+    </wsdl:port>
+    <wsdl:port name="encoreHttpPost" binding="tns:encoreHttpPost">
+      <http:address location="http://neudev.ceh.ac.uk/encore/encore.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

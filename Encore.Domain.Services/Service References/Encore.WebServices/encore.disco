@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://neudev.ceh.ac.uk/encore/encore.asmx?wsdl" docRef="http://neudev.ceh.ac.uk/encore/encore.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://neudev.ceh.ac.uk/encore/encore.asmx" xmlns:q1="http://encore.ceh.ac.uk/" binding="q1:encoreSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://neudev.ceh.ac.uk/encore/encore.asmx" xmlns:q2="http://encore.ceh.ac.uk/" binding="q2:encoreSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

@@ -1,0 +1,17 @@
+﻿@Master['master'];
+
+@Section['content']
+
+<div id="listView">
+
+	<a id="createNewButton" href="#" data-bind="click: CreateNew, visible: CanAddEntity()" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Create New</a>
+
+	<script type="text/html" id="nameCellTemplate">
+	<a class="select-item" data-bind="text: Name, attr: { href: Id }"></a>
+	</script>
+	@Partial['includes/_knockoutTableTemplate.html'];
+	@Partial['includes/BackButton.sshtml'];
+	<script type="text/javascript" src="\Content\viewmodels\@Model.ViewModel;.js"></script>
+</div>
+
+@EndSection

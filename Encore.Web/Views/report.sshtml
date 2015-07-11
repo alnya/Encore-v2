@@ -1,0 +1,170 @@
+@Master['master'];
+
+@Section['content']
+
+<div id="reportBuilder">
+	<h3>Select at least 1 field and 1 site</h3>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Fields</h3>
+				</div>
+				<div class="panel-body">
+					<div class="spacer" data-bind="template: { name: 'field-selected', foreach: selectedFields }"></div>
+
+					<ul class="spacer nav nav-pills" data-bind="foreach: fieldFilters">
+						<li data-bind="css: { active: isSelected }">
+							<a href="#" data-bind="click: $parent.selectedFieldFilter">
+								<span data-bind="text: name" />
+							</a>
+						</li>
+					</ul>
+					<div class="form-group" data-bind="visible:fieldSearchVisible">
+						<div class="input-group">
+							<input type="text" class="form-control" data-bind="textInput:FieldSearch" id="SearchFields" placeholder="Search">
+							<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+						</div>
+					</div>
+					<ul class="scrollable" data-bind="template: { name: 'field-template', foreach: fields }"></ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Sites</h3>
+				</div>
+				<div class="panel-body">
+					<div class="spacer" data-bind="template: { name: 'site-selected', foreach: selectedSites }"></div>
+
+					<ul class="spacer nav nav-pills" data-bind="foreach: siteFilters">
+						<li data-bind="css: { active: isSelected }">
+							<a href="#" data-bind="click: $parent.selectedSiteFilter">
+								<span data-bind="text: name" />
+							</a>
+						</li>
+					</ul>
+					<div class="form-group" data-bind="visible:siteSearchVisible">
+						<div class="input-group">
+							<input type="text" class="form-control" data-bind="textInput:SiteSearch" id="SearchSites" placeholder="Search">
+							<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+						</div>
+					</div>
+					<ul class="scrollable" data-bind="template: { name: 'site-template', foreach: sites }"></ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Date Ranges</h3>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="sr-only" for="ReportDate">Report Range</label>
+						<div class="input-group">
+							<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+							<input type="text" data-bind="value:selectedDateRange" class="form-control" id="ReportDate" placeholder="YYYY/MM/DD - YYYY/MM/DD">
+						</div>
+						<p class="help-block" data-bind="visible:rowCount">Data available from <span data-bind="text:dateFrom"></span> to <span data-bind="text:dateTo"></span></p>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Summary</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-12">
+							<p>There are <strong data-bind="text:rowCount">0</strong> rows of data available based on your selection.</p>
+						</div>
+					</div>
+					<div class="row" data-bind="visible: rowCount">
+						<div class="col-sm-12">
+							<div class="form-group" id="Name" data-bind="validationElement: Name">
+								<label class="control-label">Report Name</label>
+								<input type="text" class="form-control" data-bind="value: Name" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<button type="button" class="btn btn-success" data-bind="visible: rowCount, click: SaveReport"><span class="glyphicon glyphicon-ok"></span> Request Report</button>
+							<button type="button" class="btn btn-danger" data-bind="visible: rowCount, click: Reset"><span class="glyphicon glyphicon-remove"></span> Reset</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	@Partial['includes/BackButton.sshtml'];
+
+	<!-- Modal -->
+	<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="infoModalLabel">Information</h4>
+				</div>
+				<div class="modal-body">
+					<p data-bind="visible:infoSite">This site has data with the following fields</p>
+					<p data-bind="visible:infoField">This field has data with the following sites</p>
+					<ul class="scrollable" data-bind="template: { name: 'info-template', foreach: infoNodes }"></ul>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/html" id="site-selected">
+		<button type="button" class="btn btn-default btn-xs" data-bind="text:name + ' X', click:$root.removeFromSelectedSites"></button>
+	</script>
+	<script type="text/html" id="field-selected">
+		<button type="button" class="btn btn-default btn-xs" data-bind="text:name + ' X', click:$root.removeFromSelectedFields"></button>
+	</script>
+
+	<script type="text/html" id="info-template">
+		<li>
+			<span data-bind="text:name"></span>
+			<ul data-bind="template: { name: 'info-template', foreach: children }"></ul>
+		</li>
+	</script>
+
+	<script type="text/html" id="site-template">
+		<li>
+			<div class="checkbox">
+				<label><input type="checkbox" data-bind="visible:id, value:id, click:$root.addToSelectedSites"/>
+				<span data-bind="text:name"></span>
+				</label>
+				<span class="glyphicon glyphicon-info-sign" data-bind="visible:id, click:$root.ShowSiteInfo"></span>
+			</div>
+			<ul data-bind="template: { name: 'site-template', foreach: children }"></ul>
+		</li>
+	</script>
+	<script type="text/html" id="field-template">
+		<li>
+			<div class="checkbox">
+				<label><input type="checkbox" data-bind="visible:id, value:id, click:$root.addToSelectedFields"/>
+				<span data-bind="text:name"></span></label>
+				<span class="glyphicon glyphicon-info-sign" data-bind="visible:id, click:$root.ShowFieldInfo"></span>
+			</div>
+			<ul data-bind="template: { name: 'field-template', foreach: children }"></ul>
+		</li>
+	</script>
+
+	<script type="text/javascript">
+	require(['knockout', 'report'],
+		function(ko, report) {
+			report.Initialise();
+	});
+	</script>
+</div>
+
+@EndSection

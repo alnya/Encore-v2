@@ -1,0 +1,69 @@
+﻿<script type="text/html" id="formFieldReadOnly">
+  <div class="form-group" data-bind="attr:{ id:Property }">
+    <label class="control-label" data-bind="text: Name" />
+    <p class="form-control-static" data-bind="text: $root.getProperty(Property)"></p>
+  </div>
+</script>
+<script type="text/html" id="formFieldString">
+  <div class="form-group" data-bind="attr:{ id:Property }, validationElement: $root.getProperty(Property)">
+    <label class="control-label" data-bind="text: Name" />
+    <p class="form-control-static" data-bind="text: $root.getProperty(Property), visible: $root.IsInMode('VIEW')"></p>
+    <input type="text" class="form-control" data-bind="value: $root.getProperty(Property), visible: !$root.IsInMode('VIEW')" />
+  </div>
+</script>
+<script type="text/html" id="formFieldPassword">
+  <div class="form-group" data-bind="attr:{ id:Property }, validationElement: $root.getProperty(Property)">
+    <label class="control-label" data-bind="text: Name" />
+    <p class="form-control-static" data-bind="visible: $root.IsInMode('VIEW')">**********</p>
+    <input type="password" class="form-control" data-bind="value: $root.getProperty(Property), visible: !$root.IsInMode('VIEW')" />
+  </div>
+</script>
+<script type="text/html" id="formFieldText">
+  <div class="form-group" data-bind="attr:{ id:Property }, validationElement: $root.getProperty(Property)">
+    <label class="control-label" data-bind="text: Name" />
+    <p class="form-control-static" data-bind="text: $root.getProperty(Property), visible: $root.IsInMode('VIEW')"></p>
+    <textarea class="form-control" rows="4" data-bind="value: $root.getProperty(Property), visible: !$root.IsInMode('VIEW')" />
+  </div>
+</script>
+<script type="text/html" id="formFieldNumber">
+  <div class="form-group" data-bind="attr:{ id:Property }, validationOptions: { insertMessages: false }">
+    <label class="control-label" data-bind="text: Name" />
+    <p class="form-control-static" data-bind="text: $root.getProperty(Property), visible: $root.IsInMode('VIEW')"></p>
+    <div class="input-group" data-bind="visible: !$root.IsInMode('VIEW')">
+      <input type="text" class="form-control" data-bind="value: $root.getProperty(Property)" />
+      <span class="input-group-addon" data-bind="text: Suffix, visible: Suffix"></span>
+    </div>
+    <p class="text-danger" data-bind="validationMessage: $root.getProperty(Property)"></p>
+  </div>
+</script>
+<script type="text/html" id="formFieldList">
+  <div class="form-group" data-bind="attr:{ id:Property }, validationElement: $root.getProperty(Property)">
+    <label class="control-label" data-bind="text: Name" />
+    <p class="form-control-static" data-bind="text: $root.getProperty(Property), visible: $root.IsInMode('VIEW')"></p>
+    <select class="form-control" data-bind="options: Options, optionsCaption: Caption, optionsText: OptionsText, optionsValue: OptionsValue, value: $root.getProperty(Property),visible: !$root.IsInMode('VIEW')"></select>
+  </div>
+</script>
+<script type="text/html" id="formFieldDate">
+  <div class="form-group" data-bind="attr:{ id:Property }, validationElement: $root.getProperty(Property)">
+    <label class="control-label" data-bind="text: Name" />
+    <p class="form-control-static" data-bind="text: $root.getProperty(Property), visible: $root.IsInMode('VIEW')"></p>
+    <div class="input-group" data-bind="visible: !$root.IsInMode('VIEW')">
+      <div class="input-group-addon">
+        <i class="panel-title glyphicon glyphicon-calendar"></i>
+      </div>
+      <input type="text" class="form-control" data-bind="datePicker: $root.getProperty(Property)" />
+    </div>
+  </div>
+</script>
+<script type="text/html" id="formFieldCheckBox">
+  <div class="form-control-static" data-bind="visible: $root.IsInMode('VIEW')">
+    <label data-bind="text: Name" />
+    <span data-bind="text: $root.getProperty(Property)"/>
+  </div>
+  <div class="checkbox" data-bind="visible: !$root.IsInMode('VIEW')">
+    <label>
+      <input class="form-control" type="checkbox" data-bind="checked: $root.getProperty(Property)" />
+      <span data-bind="text: Name"></span>
+    </label>
+  </div>
+</script>

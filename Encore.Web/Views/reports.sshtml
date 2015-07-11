@@ -1,0 +1,23 @@
+﻿@Master['master'];
+
+@Section['content']
+
+<div id="listView">
+
+	<a id="createNewButton" href="#" data-bind="click: CreateNew, visible: CanAddEntity()" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Create New</a>
+
+	<script type="text/html" id="nameCellTemplate">
+	<a class="select-item" data-bind="text: Name, attr: { href: Id }"></a>
+	</script>
+	<script type="text/html" id="requestButtonCellTemplate">
+		<button id="requestReportButton" type="button" class="btn btn-primary btn-xs" data-bind="click: function() { $root.RequestReport(Id) }" >
+			<span class="glyphicon glyphicon-play"></span> Request Report
+		</button>
+	</script>
+
+	@Partial['includes/_knockoutTableTemplate.html'];
+	@Partial['includes/BackButton.sshtml'];
+	<script type="text/javascript" src="\Content\viewmodels\reports.js"></script>
+</div>
+
+@EndSection

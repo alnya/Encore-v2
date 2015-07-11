@@ -1,0 +1,15 @@
+﻿<div class="pull-right">
+  <span id="customFormButtons"></span>
+  <button id="deleteButton" type="button" class="btn btn-default" data-bind="click: ShowDeleteDialog, visible: CanDeleteEntity()">
+    <span class="glyphicon glyphicon-trash"></span> Delete
+  </button>
+  <button id="editButton" type="button" class="btn btn-default" data-bind="click: SetEditMode, visible: CanEditEntity()">
+    <span class="glyphicon glyphicon-pencil"></span> Edit
+  </button>
+  <button id="viewButton" type="button" class="btn btn-danger" data-bind="click: ShowCancelDialog, visible: IsInMode('EDIT')">
+    <span class="glyphicon glyphicon-remove"></span> Cancel
+  </button>
+  <button id="saveButton" type="button" class="btn btn-success" data-bind="click: Submit, visible: !IsInMode('VIEW')">
+    <span class="glyphicon glyphicon-ok"></span> Save
+  </button>
+</div>

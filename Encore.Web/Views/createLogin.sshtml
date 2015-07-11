@@ -1,0 +1,70 @@
+@Master['master'];
+
+@Section['content']
+
+<form id="entityForm" style="display:none;" role="form" data-bind="visible: DisplayForm()">
+    @Partial['includes/_formFieldTemplates.sshtml'];
+	<div class="row" data-bind="with: EntityViewModel">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                <h2 class="panel-title">Account Details</h2></div>
+                <div class="panel-body">
+					<div class="row">
+						<div class="col-sm-6">
+							<div data-bind="template: { name: 'formFieldString', data: {Property: 'Name', Name: 'Name'} }"></div>
+						</div>
+						<div class="col-sm-6">
+							<div data-bind="template: { name: 'formFieldString', data: {Property: 'Email', Name: 'Email'} }"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div data-bind="template: { name: 'formFieldPassword', data: {Property: 'Password', Name: 'Password'} }"></div>
+						</div>
+						<div class="col-sm-6">
+							<div data-bind="template: { name: 'formFieldPassword', data: {Property: 'PasswordConfirm', Name: 'Confirm Password'} }"></div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="pull-right">
+		<button id="loginButton" type="button" class="btn btn-success" data-bind="click: Submit">
+			<span class="glyphicon glyphicon-ok"></span> Login
+		</button>
+	 </div>
+	@Partial['includes/BackButton.sshtml'];
+</form>
+
+<script type="text/javascript">
+require(['knockout', 'baseForm', 'user', 'messageBox', 'webApiClient'],
+    function(ko, baseForm, user, messageBox, webApiClient) {
+		
+		var userModel = user();
+		baseForm.Initialise(userModel);
+
+		baseForm.IsDirty = function () {
+			return false;
+		}
+
+		baseForm.Submit = function () {
+            messageBox.Hide();
+
+            if (!userModel.isValid()) {
+                messageBox.ShowError("Please correct the following errors");
+                userModel.errors.showAllMessages();
+            } else {
+                webApiClient.ajaxPost(userModel.Url, ko.toJSON(userModel), null, function (model) {
+					window.location.replace("/pages/");
+                },
+                function (errorResponse) {
+                    messageBox.ShowErrors("Error adding:", errorResponse);
+                });                
+            }
+        };
+});
+</script>
+
+@EndSection

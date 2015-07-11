@@ -1,0 +1,75 @@
+﻿@Master['master'];
+
+@Section['content']
+
+<div id="resultsTable">
+    <h3 data-bind="text:reportName()"></h3>
+
+	<div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+                <tr class="columns" data-bind="foreach: columns">
+                    <th class="header" data-bind="text: name"></th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: items">
+                <tr class="table-data-row" data-bind="attr:{'data-id':$data.Id}">
+                    <!-- ko foreach: $parent.columns -->
+                    <td data-bind="text: $parent[id]"></td>
+                    <!-- /ko -->
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr data-bind="if: items().length == 0">
+                    <td data-bind="attr: {colspan: columns.length}">
+                        <div class="text-center">
+                            <span id="emptyRowText" data-bind="text: emptyRowText"></span>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div>
+        <a id="downloadButton" class="btn btn-xs btn-info pull-right" data-bind="attr:{href: downloadUrl()}, css: { disabled:items().length == 0 }">
+            <span class="glyphicon glyphicon-download"></span> Download CSV
+        </a>
+        <div data-bind="foreach: [10, 25, 50, 100]">
+            <!-- ko if: $data == $root.pageSize() -->
+            <span data-bind="text: $data + ' '" ></span>
+            <!-- /ko -->
+            <!-- ko if: $data != $root.pageSize() -->
+            <a href="#" data-bind="text: $data + ' ', click: function() { $root.pageSize($data) }"></a>
+            <!-- /ko -->
+        </div>
+        <div class="text-center">
+            <div data-bind="if: totalPages() > 1">
+                <ul class="pagination">
+                    <li data-bind="css: { disabled: isFirstPage() }">
+                        <a href="#" data-bind="click: prevPage">&laquo;</a>
+                    </li>
+                    <!-- ko foreach: pages() -->
+                    <!-- ko if: $data == "ellipsis" -->
+                    <li>
+                        <span>...</span>
+                    </li>
+                    <!-- /ko -->
+                    <!-- ko if: $data != "ellipsis" -->
+                    <li data-bind="css: { active: $data === ($root.pageIndex() + 1)}">
+                        <a href="#" data-bind="text: $data, click: $root.moveToPage"></a>
+                    </li>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <li data-bind="css: { disabled: isLastPage() }">
+                        <a href="#" data-bind="click: nextPage">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>   
+
+	@Partial['includes/BackButton.sshtml'];
+	<script type="text/javascript" src="\Content\viewmodels\results.js"></script>
+</div>
+
+@EndSection

@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<title>@Model.Title | Encore</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="stylesheet" href="/Content/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="/Content/css/encore.css"/>
+		<link rel="stylesheet" href="/Content/css/bootstrap.combobox.css"/>
+		<link rel="stylesheet" href="/Content/css/daterangepicker.css"/>
+
+		<script src="/Content/scripts/thirdparty/require.js"></script>
+		<script src="/Content/scripts/app.js"></script>
+		<script type="text/javascript">
+		@If.HasPages
+		require(['page'], function(page) {
+			page.RecordId = '@Model.RecordId';;
+		});
+		@EndIf
+		</script>
+	</head>
+	<body>
+		 @If.HasPages
+		 @Partial['includes/navigationprimary.sshtml'];
+		 @EndIf
+		 <div class="container-fluid">
+			<h1 class="page-header">@Model.Title</h1>	
+			<div class="main">
+				@Partial['includes/messageBox.sshtml'];
+				@Section['content']
+			</div>			
+			@Partial['includes/ModalDialogBox.sshtml'];
+		</div>
+	</body>
+</html>

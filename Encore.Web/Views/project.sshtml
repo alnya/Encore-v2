@@ -1,0 +1,98 @@
+@Master['master'];
+
+@Section['content']
+
+<form id="entityForm" style="display:none;" role="form" data-bind="visible: DisplayForm()">
+    @Partial['includes/_formFieldTemplates.sshtml'];
+	<div class="row" data-bind="with: EntityViewModel">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+					<h2 class="panel-title">Details</h2>
+				</div>
+                <div class="panel-body">				
+					<div class="row">
+						<div class="col-sm-6">
+							<div data-bind="template: { name: 'formFieldString', data: {Property: 'Name', Name: 'Name'} }"></div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group" id="ApiUrl" data-bind="validationElement: ApiUrl">
+								<label class="control-label">Project URL</label>
+								<p class="form-control-static" data-bind="text: ApiUrl, visible: $root.IsInMode('VIEW')"></p>
+
+								<div data-bind="visible: !$root.IsInMode('VIEW')" >
+									<div class="input-group">
+										<input type="text" class="form-control" data-bind="value: ApiUrl" />
+										<div class="input-group-btn">
+											<button id="tesUrlButton" type="button" class="btn btn-info" data-bind="click: TestUrl" >
+												<span class="glyphicon glyphicon-ok-sign"></span> Test URL
+											</button>
+										</div>
+									</div>
+									<p class="help-block" data-bind="visible: !$root.IsInMode('VIEW')">This is the URL of the project to load (e.g. 'http://nitroeuropedata.ceh.ac.uk/encore/encore.asmx')</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div data-bind="template: { name: 'formFieldText', data: {Property: 'Description', Name: 'Description'} }"></div>
+						</div>
+					</div>
+                </div>
+            </div>
+
+			 <div class="panel panel-default" data-bind="visible: !$root.IsInMode('ADD')">
+                <div class="panel-heading">
+					<h2 class="panel-title">Data Available</h2>
+				</div>
+                <div class="panel-body">				
+					<div class="row">
+						<div class="col-sm-3">
+							<label class="control-label">Last Updated</label>
+							<p class="form-control-static" data-bind="text: DataLastUpdated()"></p>
+						</div>
+						<div class="col-sm-3">
+							<label class="control-label">Sites Found</label>
+							<p class="form-control-static" data-bind="text: SiteDataCount()"></p>
+						</div>
+						<div class="col-sm-3">
+							<label class="control-label">Fields Found</label>
+							<p class="form-control-static" data-bind="text: FieldDataCount()"></p>
+						</div>
+						<div class="col-sm-3">
+							<label class="control-label">Summary Data Entries Found</label>
+							<p class="form-control-static" data-bind="text: SummaryDataCount()"></p>
+						</div>
+					</div>
+                </div>
+            </div>
+
+			 <div class="panel panel-default" data-bind="visible: !$root.IsInMode('ADD')">
+                <div class="panel-heading">
+					<h2 class="panel-title">Actions</h2>
+				</div>
+                <div class="panel-body">				
+					<div class="row">
+						<div class="col-sm-12">
+							<button id="syncProjectDetailsButton" type="button" class="btn btn-primary" data-bind="click: SyncDetails" >
+								<span class="glyphicon glyphicon-refresh"></span> Refresh Available Data
+							</button>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+	@Partial['includes/_knockoutFormButtons.sshtml'];
+	@Partial['includes/BackButton.sshtml'];
+</form>
+
+<script type="text/javascript">
+require(['knockout', 'baseForm', 'project'],
+    function(ko, baseForm, project) {
+		baseForm.Initialise(project());
+});
+</script>
+
+@EndSection

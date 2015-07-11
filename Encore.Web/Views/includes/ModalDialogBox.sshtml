@@ -1,0 +1,37 @@
+﻿<div id="modalDialogView">
+	<div style="display:none;" data-bind="css: ModalClass" id="aeModalDialog" tabindex="-1" role="dialog" aria-hidden="true">
+		<div data-bind="css: ModalDialogClass">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">
+				<span class="sr-only">Close</span>
+			</button>
+			<h4 class="modal-title" data-bind="text: ModalDialogTitle"></h4>
+			</div>
+			<div class="alert" data-bind="css: ModalMessageType" id="modalMessageBox" role="alert">
+			<span class="glyphicon" data-bind="css: ModalMessageIcon"></span>
+			<span id="modalMessageBoxContent" data-bind="text: ModalMessage"></span>
+			</div>
+			<div class="modal-body">
+			<!-- ko if: ModalDialogTemplate  -->
+			<div data-bind="template: { name: ModalDialogTemplate }"></div>
+			<!-- /ko -->
+			<!-- ko ifnot: ModalDialogTemplate  -->
+			<span data-bind="text: ModalDialogBody"></span>
+			<!-- /ko -->
+			</div>
+			<div class="modal-footer">
+			<button id="closeModalButton" type="button" class="btn btn-default" data-dismiss="modal" data-bind="text: ModalDialogCancelBtnText"></button>
+			<!-- ko if: ModalDialogOkBtnIsVisible  -->
+			<!-- ko if: ModalDialogOkModalDismiss  -->
+			<button id="saveModalDismissButton" type="button" class="btn btn-primary" data-dismiss="modal" data-bind="click: DialogOk, text: ModalDialogOkBtnText"></button>
+			<!-- /ko -->
+			<!-- ko ifnot: ModalDialogOkModalDismiss  -->
+			<button id="saveModalButton" type="button" class="btn btn-primary" data-bind="click: DialogOk, text: ModalDialogOkBtnText"></button>
+			<!-- /ko -->
+			<!-- /ko -->
+			</div>
+		</div>
+		</div>
+	</div>
+</div>

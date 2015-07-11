@@ -1,0 +1,122 @@
+﻿<span data-bind="dataTable: tableViewModel">
+    <!-- -->
+</span>
+
+@Partial['includes/_knockoutFilterTemplate.sshtml'];
+
+<script type='text/html' id='ko-table-template'>
+    <div class="spacer"></div>
+    <!-- ko if: filterMode == 'search' -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Search</h3>
+        </div>
+        <div class="panel-body" data-bind="template: { name: 'ko-filter-template'}"></div>
+    </div>
+    <!-- /ko -->
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+                <tr class="columns" data-bind="foreach: visibleColumns">
+                    <!-- ko if: $data.sortable -->
+                    <th class="header sortable" data-bind="style: { width: width }, click: $root.sort">
+                        <span data-bind="text:name"></span>
+                        <!-- ko if: $data === $root.sortColumn() -->
+                        <span class="pull-right" data-bind="css: {'caret-up': !$data.sortDescending(), 'caret': $data.sortDescending()}"></span>
+                        <!-- /ko -->
+                    </th>
+                    <!-- /ko -->
+                    <!-- ko ifnot: $data.sortable -->
+                    <th class="header" data-bind="text: name, style: { width: width }"></th>
+                    <!-- /ko -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ko if: filterMode == 'filter' -->
+                <tr class="header-filters" data-bind="foreach: visibleColumns">
+                    <td>
+                        <!-- ko if: $data.filterable -->
+                        <!-- ko if: $data.dataType == 'String' -->
+                        <input type="text" class="form-control" data-bind="value: filterValue, valueUpdate: 'afterkeydown'">
+                        <!-- /ko -->
+                        <!-- ko if: $data.dataType == 'Number' -->
+                        <input type="text" class="form-control" data-bind="value: filterValue, valueUpdate: 'afterkeydown'">
+                        <!-- /ko -->
+                        <!-- ko if: $data.dataType == 'List' -->
+                        <select class="form-control" data-bind="options: filterValues, value: filterValue, optionsCaption: 'Any ' + name"></select>
+                        <!-- /ko -->
+                        <!-- ko if: $data.dataType == 'Date' -->
+                        <input type="date" class="form-control" data-bind="value: filterValue">
+                        <!-- /ko -->
+                        <!-- /ko -->
+                    </td>
+                </tr>
+                <!-- /ko -->
+            </tbody>
+            <tbody data-bind="foreach: items">
+                <tr class="table-data-row" data-bind="attr:{'data-id':$data.Id}">
+                    <!-- ko foreach: $parent.visibleColumns -->
+                    <!-- ko if: template -->
+                    <td data-bind="template: { name: template, data: $parent }"></td>
+                    <!-- /ko -->
+                    <!-- ko ifnot: template -->
+                    <!-- ko if: ($data.dataType == 'Date' || $data.dataType == 'DateRange') -->
+                    <td data-bind="text: $root.formatDate(value, $parent)"></td>
+                    <!-- /ko -->
+                    <!-- ko ifnot: ($data.dataType == 'Date' || $data.dataType == 'DateRange') -->
+                    <td data-bind="text: typeof value == 'function' ? value($parent) : $parent[value] "></td>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr data-bind="if: items().length == 0">
+                    <td data-bind="attr: {colspan: columns.length}">
+                        <div class="text-center">
+                            <span id="emptyRowText" data-bind="text: emptyRowText"></span>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div>
+        <a id="downloadButton" class="btn btn-xs btn-info pull-right" data-bind="attr:{href: downloadUrl()}, css: { disabled:items().length == 0 }, visible: downloadEnabled">
+            <span class="glyphicon glyphicon-download"></span> Download CSV
+        </a>
+        <div data-bind="foreach: [10, 25, 50, 100]">
+            <!-- ko if: $data == $root.pageSize() -->
+            <span data-bind="text: $data + ' '" />
+            <!-- /ko -->
+            <!-- ko if: $data != $root.pageSize() -->
+            <a href="#" data-bind="text: $data + ' ', click: function() { $root.pageSize($data) }" />
+            <!-- /ko -->
+        </div>
+        <div class="text-center">
+            <div data-bind="if: totalPages() > 1">
+                <ul class="pagination">
+                    <li data-bind="css: { disabled: isFirstPage() }">
+                        <a href="#" data-bind="click: prevPage">&laquo;</a>
+                    </li>
+                    <!-- ko foreach: pages() -->
+                    <!-- ko if: $data == "ellipsis" -->
+                    <li>
+                        <span>...</span>
+                    </li>
+                    <!-- /ko -->
+                    <!-- ko if: $data != "ellipsis" -->
+                    <li data-bind="css: { active: $data === ($root.pageIndex() + 1)}">
+                        <a href="#" data-bind="text: $data, click: $root.moveToPage" />
+                    </li>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <li data-bind="css: { disabled: isLastPage() }">
+                        <a href="#" data-bind="click: nextPage">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</script>

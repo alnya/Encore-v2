@@ -1,0 +1,55 @@
+﻿<script type='text/html' id='ko-filter-template'>
+    <form class="form-inline" data-bind="submit: reload" role="form">
+        <div class="form-group">
+            <!-- ko foreach: allFilterableFields -->
+            <!-- ko ifnot: typeof $data.labelText == 'undefined' || $data.labelText == '' -->
+            <label class="control-label" data-bind="text: labelText, attr:{for : 'searchField' + value}"></label>
+            <!-- /ko -->
+            <!-- ko if: $data.dataType == 'String' -->
+            <input type="text" class="form-control" data-bind="value: filterValue, attr:{placeholder: name, id : 'searchField' + value}"/>
+            <!-- /ko -->
+            <!-- ko if: $data.dataType == 'Number' -->
+            <input type="text" class="form-control" data-bind="value: filterValue, attr:{placeholder: name, id : 'searchField' + value}"/>
+            <!-- /ko -->
+            <!-- ko if: $data.dataType == 'List' -->
+            <select class="form-control" data-bind="options: filterValues, value: filterValue, optionsCaption: 'Any ' + name, attr:{id : 'searchField' + value}"></select>
+            <!-- /ko -->        
+            <!-- ko if: $data.dataType == 'EntityList' -->
+            <select class="form-control" data-bind="options: $data.Options, value: filterValue, optionsText:'Name', optionsValue:'Id', optionsCaption: OptionsCaption, attr:{id : 'searchField' + value}"></select>
+            <!-- /ko -->            
+            <!-- ko if: $data.dataType == 'Date' -->
+            <div class="input-group datePicker">
+              <div class="input-group-addon">
+                <i class="panel-title glyphicon glyphicon-calendar"></i>
+              </div>
+              <input type="text" class="form-control" data-bind="value: filterValue, attr:{placeholder: name, id : 'searchField' + value}" />
+            </div>
+            <!-- /ko -->  
+            <!-- ko if: $data.dataType == 'DateRange' -->
+            <div class="input-group dateRange">
+                <div class="input-group-addon"><i class="panel-title glyphicon glyphicon-calendar"></i></div>
+                <input type="text" class="form-control" data-bind="value: filterValue, attr:{placeholder: name, id : 'searchField' + value}" />
+            </div>
+        <!-- /ko -->
+        <!-- /ko -->
+        </div>
+        <button id="searchButton" type="submit" class="btn btn-default">
+            <!-- ko if: typeof okIcon != 'undefined' -->
+            <span class="panel-title glyphicon" data-bind="css: okIcon"></span>
+            <!-- /ko -->
+            <!-- ko if: typeof okIcon == 'undefined' -->
+            <span class="panel-title glyphicon glyphicon-search"></span>
+            <!-- /ko -->
+            <!-- ko if: typeof okText != 'undefined' -->
+            <span data-bind="text: okText"></span>
+            <!-- /ko -->
+            <!-- ko if: typeof okText == 'undefined' -->
+            <span>Search</span>
+            <!-- /ko -->
+        </button>
+        <button id="clearButton" type="button" class="btn btn-danger" data-bind="click: clearFilter, visible: filterApplied()">
+            <span class="glyphicon glyphicon-remove" ></span> Clear
+        </button>
+    </form>
+</script>
+   

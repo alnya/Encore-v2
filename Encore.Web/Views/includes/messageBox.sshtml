@@ -1,0 +1,4 @@
+﻿<div class="alert hidden clearfix" data-bind="css: Type" id="messageBox" role="alert">
+  <span class="glyphicon" data-bind="css: Icon"></span>
+  <div id="messageBoxContent"  data-bind="html: Message"></div>
+</div>
