@@ -31,6 +31,8 @@
             self.selectedDateRange = ko.observable('');
 
             self.Name = ko.observable('').extend({ maxLength: 100, required: true });
+            self.Mode = ko.observable('VIEW');
+            self.IsLoaded = ko.observable(false);
 
             self.SiteSearch = ko.observable('');
             self.FieldSearch = ko.observable('');
@@ -100,7 +102,7 @@
             self.Reset = function () {
                 self.selectedFields([]);
                 self.selectedSites([]);
-                self.selectedDateRange('');
+                self.SetDefaultDateRange();
             };
 
             self.FilterArrayByType = function (type, array, selected) {
@@ -427,15 +429,47 @@
                     entityModel.SiteIds.push(site.id);
                 });
 
-                webApiClient.ajaxPost("/reports/", ko.toJSON(entityModel), null, function (model) {
-                    window.location.href = "./";
-                },
-                function (errorResponse) {
-                    messageBox.ShowErrors("Error adding:", errorResponse);
-                });
+                var reportId = page.RecordId;
+
+                if (reportId != 'add' && reportId != null) {
+                    webApiClient.ajaxPut("/reports/", reportId, ko.toJSON(entityModel), function (model) {
+                        messageBox.ShowSuccess("Report Requested Successfully");
+                    },
+                    function (errorResponse) {
+                        messageBox.ShowErrors("Error updating:", errorResponse);
+                    });
+                } else {
+                    webApiClient.ajaxPost("/reports/", ko.toJSON(entityModel), null, function (model) {
+                        messageBox.ShowSuccess("Report Requested Successfully");
+                        self.SetEditMode();
+                        if (model.Id) {
+                            location.href = document.URL.replace("add", model.Id + "?success=true");
+                        }
+                    },
+                    function (errorResponse) {
+                        messageBox.ShowErrors("Error adding:", errorResponse);
+                    });
+                }
             }
 
-            self.SetModel = function (model) {
+            self.DeleteReport = function () {
+                var reportId = page.RecordId;
+                if (reportId != null) {
+                    webApiClient.ajaxDelete("/reports/", reportId,
+                        function (model) {
+                            messageBox.ShowSuccess("Deleted Successfully");
+                            self.SetDeletedMode();
+                        },
+                        function (errorResponse) {
+                            messageBox.ShowErrors("Error deleting:", errorResponse);
+                        });
+
+                } else {
+                    messageBox.ShowError("Error deleting.");
+                }
+            }
+
+            self.SetSelectionDataModel = function (model) {
                 var self = this;
                 self.siteTypes(model.siteTypes);
                 self.fieldTypes(model.fieldTypes);
@@ -444,18 +478,99 @@
                 self.siteData(model.siteData);
             }
 
-            self.Initialise = function () {
-                var self = this;
+            self.IsInMode = function (mode) {
+                return self.Mode() == mode;
+            };
 
+            self.CanDeleteEntity = function () {
+                return self.IsInMode('EDIT');
+            };
+
+            self.SetAddMode = function () {
+                self.Mode("ADD");
+            };
+
+            self.SetEditMode = function () {
+                self.Mode("EDIT");
+            };
+
+            self.SetDeletedMode = function () {
+                self.Mode("DELETED");
+                self.IsLoaded(false);
+            };
+
+            self.ShowDeleteDialog = function () {
+                var r = confirm("Are you sure you want to delete this report?");
+                if (r) {
+                    self.DeleteReport();
+                }
+            };
+            
+            self.GetReportEntity = function () {
+                var reportId = page.RecordId;
+
+                if (reportId != 'add' && reportId != null) {
+                    webApiClient.ajaxGet("/reports/" + reportId, null, null, function (model) {
+                        if (model) {
+                            self.SetReportSelection(model);
+                            self.SetEditMode();
+                            self.IsLoaded(true);
+                        }
+                    },
+                    function (errorResponse) {
+                        messageBox.ShowErrors("Error loading:", errorResponse);
+                    });
+                } else {
+                    self.SetAddMode();
+                    self.IsLoaded(true);
+                }
+            }
+
+            self.SetReportSelection = function (model) {
+                ko.utils.arrayForEach(model.FieldIds, function (fieldId) {
+                    var field = ko.utils.arrayFirst(self.fieldData(), function (field) {
+                        return field.id == fieldId;
+                    });
+                    self.selectedFields.push(field);
+                });
+
+                ko.utils.arrayForEach(model.SiteIds, function (siteId) {
+                    var site = ko.utils.arrayFirst(self.siteData(), function (site) {
+                        return site.id == siteId;
+                    });
+                    self.selectedSites.push(site);
+                });
+
+                self.selectedDateRange(moment(model.DateFrom).format(common.CLIENT_DATE_FORMAT) + " - " + moment(model.DateTo).format(common.CLIENT_DATE_FORMAT));
+
+                self.Name(model.Name)
+
+                self.selectedSiteFilter(self.fieldFilters()[4]);
+                self.selectedSiteFilter(self.siteFilters()[4]);
+            }
+
+            self.GetSelectionData = function () {
+                var self = this;
                 webApiClient.ajaxGet("/reports/builder", null, null, function (model) {
                     if (model) {
-                        self.SetModel(model);
+                        self.SetSelectionDataModel(model);
+                        self.GetReportEntity();
                     }
                 },
                 function (errorResponse) {
                     messageBox.ShowErrors("Error loading:", errorResponse);
                 });
+            };
 
+            self.SetDefaultDateRange = function () {
+                self.selectedDateRange("2006/01/01 - " + moment().format(common.CLIENT_DATE_FORMAT));
+            }
+
+            self.Initialise = function () {
+                var self = this;
+
+                self.GetSelectionData();
+  
                 ko.applyBindings(self, $("#reportBuilder")[0]);
 
                 $('input[id="ReportDate"]').daterangepicker({
@@ -465,7 +580,12 @@
                     $('input[id="ReportDate"]').val(start.format(common.CLIENT_DATE_FORMAT) + ' - ' + end.format(common.CLIENT_DATE_FORMAT)).change();
                 });
 
-                self.selectedDateRange("2006/01/01 - " + moment().format(common.CLIENT_DATE_FORMAT));
+                self.SetDefaultDateRange();
+
+                var qa = common.parseQueryString(location.search.substring(1));
+                if (qa["success"]) {
+                    messageBox.ShowSuccess("Report Requested Successfully");
+                }
             };
         }
 

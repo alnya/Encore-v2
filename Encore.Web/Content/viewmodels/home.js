@@ -16,8 +16,8 @@
                             ko.utils.arrayForEach(data, function (item) {
                                 resultRows.push({
                                     ReportName: item.ReportName,
-                                    ResultId: item.ResultId,
-                                    RequestDate: moment(item.RequestDate).format(common.CLIENT_DATETIME_FORMAT)
+                                    ResultId: item.Id,
+                                    RequestDate: moment(item.RunDate).format(common.CLIENT_DATETIME_FORMAT)
                                 })
                             });
 

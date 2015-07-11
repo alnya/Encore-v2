@@ -6,8 +6,8 @@
         var reportsViewModel = new baseList.ListViewModel({
             columns: [
                 { name: "Report Name", value: "Name", sortDescending: false, template: "nameCellTemplate" },
-                { name: "Last Requested", value: "LastRequested", dataType: "Date" },
                 { name: "Request Status", value: "LastRequestStatus", dataType: "List", filterValues: ['Pending', 'InProgress', 'Failed', 'Complete'] },
+                { name: "Last Requested", value: "LastRequested", filterable: false, dataType: "Date" },
                 { name: "Action", template: "requestButtonCellTemplate", filterable: false, sortable: false }
             ],
             sortable: true,

@@ -11,6 +11,6 @@
 
         ReportResultsResponse GetAllResults(Guid resultId);
 
-        IEnumerable<ReportResultAvailable> GetAvailableResults(Guid userId);
+        IEnumerable<ReportResult> GetAvailableResults(Guid userId);
     }
 }

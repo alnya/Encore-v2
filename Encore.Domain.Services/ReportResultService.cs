@@ -20,30 +20,10 @@
             this.context = context;
         }
 
-        public IEnumerable<ReportResultAvailable> GetAvailableResults(Guid userId)
+        public IEnumerable<ReportResult> GetAvailableResults(Guid userId)
         {
-            var requestRepo = context.GetRepository<ReportRequest>();
-            var userRequests = requestRepo.GetWhere(x => x.RequestingUserId == userId && x.ResultId.HasValue).OrderByDescending(x => x.RequestDate).Take(5);
-
-            var reportRepo = context.GetRepository<Report>();
-            var resultsAvailable = new List<ReportResultAvailable>();
-
-            foreach(var request in userRequests)
-            {
-                var report = reportRepo.Get(request.ReportId);
-
-                if (report != null)
-                {
-                    resultsAvailable.Add(new ReportResultAvailable
-                    {
-                        ReportName = report.Name,
-                        ResultId = request.ResultId.Value,
-                        RequestDate = request.RequestDate
-                    });
-                }
-            }
-
-            return resultsAvailable;
+            var resultRepo = context.GetRepository<ReportResult>();
+            return resultRepo.GetWhere(x => x.RequestedBy == userId).OrderByDescending(x => x.RunDate).Take(5);
         }
 
         public ReportResultsResponse GetResultsPage(Guid resultId, IRequestedPage requestedPage)
@@ -52,12 +32,8 @@
             var reportResult = resultRepo.Get(resultId);
             reportResult.ValidateNotNull();
 
-            var reportRepo = context.GetRepository<Report>();
-            var report = reportRepo.Get(reportResult.ReportId);
-            report.ValidateNotNull();
-
             var fieldRepo = context.GetRepository<Field>();
-            var reportFields = fieldRepo.GetWhere(f => report.FieldIds.Any(id => id == f.SourceId));
+            var reportFields = fieldRepo.GetWhere(f => reportResult.FieldIds.Any(id => id == f.SourceId));
             var columns = reportFields.Select(x => new ReportResultColumn { FieldId = x.SourceId, FieldName = x.Name, UnitName = x.Unit });  
 
             var resultRowRepo = context.GetRepository<ReportResultRow>();
@@ -72,7 +48,7 @@
                 Pages = pagedResults.Pages,
                 Rows = pagedResults.Results,
                 FieldColumns = columns,
-                ReportName = report.Name
+                ReportName = reportResult.ReportName
             };
         }
         
@@ -82,12 +58,8 @@
             var reportResult = resultRepo.Get(resultId);
             reportResult.ValidateNotNull();
 
-            var reportRepo = context.GetRepository<Report>();
-            var report = reportRepo.Get(reportResult.ReportId);
-            report.ValidateNotNull();
-
             var fieldRepo = context.GetRepository<Field>();
-            var reportFields = fieldRepo.GetWhere(f => report.FieldIds.Any(id => id == f.SourceId));
+            var reportFields = fieldRepo.GetWhere(f => reportResult.FieldIds.Any(id => id == f.SourceId));
             var columns = reportFields.Select(x => new ReportResultColumn { FieldId = x.SourceId, FieldName = x.Name, UnitName = x.Unit });
 
             var resultRowRepo = context.GetRepository<ReportResultRow>();
@@ -99,7 +71,7 @@
                 Pages = 1,
                 Rows = rows,
                 FieldColumns = columns,
-                ReportName = report.Name
+                ReportName = reportResult.ReportName
             };
         }       
     }

@@ -8,6 +8,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Extensions;
+    using Encore.Domain.Services.Exceptions;
 
     public class ReportService : EntityService<Report>, IReportService
     {
@@ -17,6 +18,43 @@
             : base(context)
         {
             this.context = context;
+        }
+
+        public Report Add(Report report, Guid userId)
+        {
+            report.CreatedBy = userId;
+            return base.Add(report);
+        }
+
+        public Report Update(Guid id, Report report, Guid userId)
+        {
+            var reportRepo = context.GetRepository<Report>();
+            var currentReport = reportRepo.Get(id);
+            currentReport.ValidateNotNull();
+
+            if (currentReport.CreatedBy != userId)
+            {
+                throw new DomainException("Cannot edit a report created by another user");
+            }
+
+            var reportRequestRepo = context.GetRepository<ReportRequest>();
+            reportRequestRepo.DeleteWhere(x => x.ReportId == id);
+
+            report.CreatedBy = userId;
+            reportRepo.Merge(id, report);
+
+            return report;
+        }
+
+        public override bool Delete(Guid id)
+        {
+            var reportRequestRepo = context.GetRepository<ReportRequest>();
+            reportRequestRepo.DeleteWhere(x => x.ReportId == id);
+
+            var reportRepo = context.GetRepository<Report>();
+            reportRepo.DeleteWhere(x => x.Id == id);
+
+            return true;
         }
 
         public bool RequestReport(Guid reportId)
@@ -30,7 +68,6 @@
             var request = new ReportRequest
             {
                 ReportId = reportId,
-                RequestingUserId = report.CreatedBy,
                 RequestDate = DateTime.Now,
                 Status = RequestStatus.Pending
             };

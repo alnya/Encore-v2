@@ -7,6 +7,12 @@
     {
         public Guid ReportId { get; set; }
 
+        public string ReportName { get; set; }
+
+        public List<string> FieldIds;
+
+        public Guid RequestedBy { get; set; }
+
         public DateTime RunDate { get; set; }
     }
 }

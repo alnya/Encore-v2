@@ -26,7 +26,7 @@
             this.requests = requests;
         }
 
-        public void SetStatus(RequestStatus status, Guid? resultId = null)
+        public void SetStatus(RequestStatus status)
         {
             if (report != null)
             {
@@ -37,7 +37,6 @@
             foreach(var request in requests)
             {
                 request.Status = status;
-                request.ResultId = resultId;
                 requestRepo.Merge(request.Id, request);
             }
         }

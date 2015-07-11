@@ -2,7 +2,7 @@
 
 @Section['content']
 
-<div id="reportBuilder">
+<div id="reportBuilder" style="display:none;" data-bind="visible: IsLoaded">
 	<h3>Select at least 1 field and 1 site</h3>
 	<div class="row">
 		<div class="col-sm-4">
@@ -81,7 +81,7 @@
 							<p>There are <strong data-bind="text:rowCount">0</strong> rows of data available based on your selection.</p>
 						</div>
 					</div>
-					<div class="row" data-bind="visible: rowCount">
+					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group" id="Name" data-bind="validationElement: Name">
 								<label class="control-label">Report Name</label>
@@ -91,8 +91,11 @@
 					</div>
 					<div class="row">
 						<div class="col-sm-12">
-							<button type="button" class="btn btn-success" data-bind="visible: rowCount, click: SaveReport"><span class="glyphicon glyphicon-ok"></span> Request Report</button>
-							<button type="button" class="btn btn-danger" data-bind="visible: rowCount, click: Reset"><span class="glyphicon glyphicon-remove"></span> Reset</button>
+							<button type="button" class="btn btn-success" data-bind="enable: rowCount, click: SaveReport"><span class="glyphicon glyphicon-ok"></span> Request Report</button>
+							<button type="button" class="btn btn-danger" data-bind="click: Reset"><span class="glyphicon glyphicon-remove"></span> Reset</button>
+							<button id="deleteButton" type="button" class="btn btn-default pull-right" data-bind="click: ShowDeleteDialog, visible: CanDeleteEntity()">
+								<span class="glyphicon glyphicon-trash"></span> Delete
+							</button>
 						</div>
 					</div>
 				</div>

@@ -31,9 +31,13 @@
             
             Get["/{id}"] = GetReport;
 
-            Put["/{id}/request"] = RequestReport;
-
             Post["/"] = AddReport;
+
+            Put["/{id}"] = UpdateReport;
+
+            Delete["/{id}"] = DeleteReport;
+
+            Put["/{id}/request"] = RequestReport;
 
             Get["/myResults"] = GetMyResults;
 
@@ -74,6 +78,18 @@
             return MapTo<Encore.Web.Models.Report>(report);
         }
 
+        private dynamic DeleteReport(dynamic args)
+        {
+            var deleted = reportService.Delete(new Guid(args.id));
+            
+            if (!deleted)
+            {
+                return Negotiate.WithStatusCode(HttpStatusCode.NotFound);
+            }
+
+            return Negotiate.WithStatusCode(HttpStatusCode.NoContent);
+        }
+
         private dynamic AddReport(dynamic args)
         {
             var model = this.BindAndValidate<Encore.Web.Models.Report>();
@@ -84,13 +100,28 @@
             }
 
             var addEntity = MapTo<Report>(model);
-            addEntity.CreatedBy = AuthorizedUserId;
-            var returnEntity = reportService.Add(addEntity);
+            var returnEntity = reportService.Add(addEntity, AuthorizedUserId);
 
             reportService.RequestReport(returnEntity.Id);
             return MapTo<Encore.Web.Models.Report>(returnEntity);
         }
 
+        private dynamic UpdateReport(dynamic args)
+        {
+            var model = this.BindAndValidate<Encore.Web.Models.Report>();
+
+            if (!ModelValidationResult.IsValid)
+            {
+                return RespondWithValidationFailure(ModelValidationResult);
+            }
+
+            var updateEntity = MapTo<Report>(model);
+            var returnEntity = reportService.Update(new Guid(args.id), updateEntity, AuthorizedUserId);
+
+            reportService.RequestReport(returnEntity.Id);
+            return MapTo<Encore.Web.Models.Report>(returnEntity);
+        }
+        
         private dynamic RequestReport(dynamic args)
         {
             var report = reportService.Get(new Guid(args.id));

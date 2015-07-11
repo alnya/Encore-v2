@@ -76,7 +76,7 @@
                 messageBox.Hide();
                 self.emptyRowText("Loading Result Data");
 
-                var params = "PageSize=" + self.pageSize() + '&Page=' + self.pageIndex() + 1;
+                var params = "PageSize=" + self.pageSize() + '&Page=' + (self.pageIndex() + 1);
 
                 webApiClient.ajaxGet("reports/results/" + page.RecordId, null, params,
                     function (data) {

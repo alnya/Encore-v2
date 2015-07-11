@@ -67,10 +67,7 @@
 
                 if (reportResult != null)
                 {
-                    foreach (var alertUserId in requests.Select(x => x.RequestingUserId).Distinct())
-                    {
-                        reportAlerts.ReportComplete(reportResult.Id, alertUserId);
-                    }
+                    reportAlerts.ReportComplete(reportResult.Id, report.CreatedBy);
                 }
             }
         }
@@ -103,6 +100,9 @@
                 var reportResult = new ReportResult
                 {
                     ReportId = report.Id,
+                    ReportName = report.Name,
+                    FieldIds = report.FieldIds,
+                    RequestedBy = report.CreatedBy,
                     RunDate = DateTime.Now
                 };
 
@@ -115,7 +115,7 @@
 
                 Task.WaitAll(projectTasks.ToArray());
 
-                statusManager.SetStatus(RequestStatus.Complete, reportResult.Id);
+                statusManager.SetStatus(RequestStatus.Complete);
                 return reportResult;
             }
             catch (Exception ex)
