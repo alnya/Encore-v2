@@ -61,8 +61,8 @@
                 new Section('All', self.selectedFieldFilter),
                 new Section('Project', self.selectedFieldFilter),
                 new Section('Type', self.selectedFieldFilter),
-                new Section('Search', self.selectedSiteFilter),
-                new Section('Sites', self.selectedSiteFilter)
+                new Section('Search', self.selectedFieldFilter),
+                new Section('Sites', self.selectedFieldFilter)
             ]);
 
             self.siteSearchVisible = ko.computed(function () {
@@ -103,6 +103,8 @@
                 self.selectedFields([]);
                 self.selectedSites([]);
                 self.SetDefaultDateRange();
+                self.selectedFieldFilter(self.fieldFilters()[0]);
+                self.selectedSiteFilter(self.siteFilters()[0]);
             };
 
             self.FilterArrayByType = function (type, array, selected) {
@@ -545,7 +547,7 @@
 
                 self.Name(model.Name)
 
-                self.selectedSiteFilter(self.fieldFilters()[4]);
+                self.selectedFieldFilter(self.fieldFilters()[4]);
                 self.selectedSiteFilter(self.siteFilters()[4]);
             }
 

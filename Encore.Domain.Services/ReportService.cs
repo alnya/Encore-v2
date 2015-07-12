@@ -92,6 +92,12 @@
             var fields = fieldRepo.GetWhere();
             var projects = projectRepo.GetWhere(p => p.SiteSummaries != null && p.SiteSummaries.Any(s => s.RowCount > 0));
 
+            foreach(var project in projects)
+            {
+                // Strip summary entries with 0 rows.
+                project.SiteSummaries = project.SiteSummaries.Where(x => x.RowCount > 0).ToList();
+            }
+
             var builderData = new ReportBuilderData
             {
                 SiteTypes = sites.Select(x => x.Type).Distinct().ToList(),
@@ -138,8 +144,11 @@
                     // Get all project field Ids present in summary data for this site, map to global Field Ids
                     var projectFieldIds = inProjects.SelectMany(p => p.SiteSummaries.Where(summary => SiteFoundInSummary(projectSiteIdMap, site, summary)).Select(s => s.FieldSourceId)).Distinct().ToList();
                     reportSite.FieldIds = fields.Where(f => f.ProjectIds.Any(id => projectFieldIds.Any(x => x == id))).Select(f => f.SourceId).ToList();
-
-                    siteData.Add(reportSite);
+                    
+                    if (reportSite.FieldIds.Any())
+                    {
+                        siteData.Add(reportSite);
+                    }
                 }
             };
 
@@ -172,7 +181,10 @@
 
                     reportField.SiteIds = projectSiteIds.Where(x => projectSiteIdMap.ContainsKey(x)).Select(x => projectSiteIdMap[x].ToString()).ToList();
 
-                    fieldData.Add(reportField);
+                    if (reportField.SiteIds.Any())
+                    {
+                        fieldData.Add(reportField);
+                    }
                 }
             };
 
