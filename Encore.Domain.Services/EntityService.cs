@@ -5,9 +5,6 @@
     using Encore.Domain.Interfaces.Services;
     using Encore.Domain.Services.Search;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     public class EntityService<T> : IEntityService<T> where T : EntityBase
     {

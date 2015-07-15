@@ -1,8 +1,6 @@
 ﻿namespace Encore.Domain.Services
 {
     using System;
-    using System.Configuration;
-    using System.IO;
     using System.Linq;
     using System.Text;
     using Encore.Domain.Entities;
@@ -82,7 +80,7 @@
         {
             if (report == null)
             {
-                statusManager.SetStatus(RequestStatus.Failed);
+                statusManager.SetFailed();
                 return null;
             }
 
@@ -91,7 +89,7 @@
             var reportFields = fields.Where(f => report.FieldIds.Any(id => id == f.SourceId));
             var reportSites = sites.Where(s => report.SiteIds.Any(id => id == s.Id));
 
-            statusManager.SetStatus(RequestStatus.InProgress);
+            statusManager.SetInProgress();
 
             try
             {
@@ -115,12 +113,12 @@
 
                 Task.WaitAll(projectTasks.ToArray());
 
-                statusManager.SetStatus(RequestStatus.Complete);
+                statusManager.SetCompleted(reportResult.Id);
                 return reportResult;
             }
             catch (Exception ex)
             {
-                statusManager.SetStatus(RequestStatus.Failed);
+                statusManager.SetFailed();
                 log.Error(string.Format("Get Data for report {0} failed", report.Id), ex);
                 return null;
             }

@@ -1,6 +1,5 @@
 ﻿namespace Encore.Web.Models
 {
-    using Encore.Domain.Entities;
     using Encore.Web.Mapping;
     using System;
     using System.Collections.Generic;
@@ -20,6 +19,8 @@
         public DateTime LastRequested { get; set; }
 
         public String LastRequestStatus { get; set; }
+
+        public Guid? LastResultId { get; set; }
 
         public IEnumerable<string> FieldIds;
 

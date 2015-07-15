@@ -3,13 +3,11 @@
     using AutoMapper;
     using Encore.Domain.Interfaces.Services;
     using Nancy;
-    using Nancy.Security;
     using System;
     using System.Linq;
     using Extensions;
     using Encore.Domain.Entities;
     using System.Collections.Generic;
-    using Encore.Domain.Entities.BusinessObjects;
     using Nancy.ModelBinding;
 
     public class ReportModule : SecureModule

@@ -6,8 +6,6 @@
     using Nancy;
     using Nancy.ModelBinding;
     using Extensions;
-    using Encore.Web.Security;
-    using Nancy.Security;
 
     public class AuthModule : BaseModule
     {

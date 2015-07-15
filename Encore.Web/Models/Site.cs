@@ -1,11 +1,7 @@
 ﻿namespace Encore.Web.Models
 {
     using Encore.Web.Mapping;
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Text;
 
     [MapsFrom(typeof(Domain.Entities.Site))]
     [MapsTo(typeof(Domain.Entities.Site))]

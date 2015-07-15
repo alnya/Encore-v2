@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using Encore.DataStore;
-    using Encore.Domain.Entities;
     using Encore.Domain.Interfaces.DataStore;
     using Encore.Domain.Interfaces.Services;
     using Encore.Domain.Services;
@@ -18,7 +17,6 @@
     using System.Reflection;
     using Encore.Web.Extensions;
     using Encore.PoolParty;
-    using System.Threading;
 
     public class Bootstrapper : DefaultNancyBootstrapper
     {

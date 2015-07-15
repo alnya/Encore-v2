@@ -15,9 +15,15 @@
 		</button>
 	</script>
 
+	<script type="text/html" id="viewResultsButtonCellTemplate">
+		<button id="viewResultsButton" type="button" class="btn btn-info btn-xs" data-bind="visible: LastResultId, click: function() { $root.ViewResults(LastResultId) }" >
+			<span class="glyphicon glyphicon-play"></span> View Results
+		</button>
+	</script>
+
 	@Partial['includes/_knockoutTableTemplate.html'];
 	@Partial['includes/BackButton.sshtml'];
-	<script type="text/javascript" src="\Content\viewmodels\reports.js"></script>
+	<script type="text/javascript" src="/Content/viewmodels/reports.js"></script>
 </div>
 
 @EndSection

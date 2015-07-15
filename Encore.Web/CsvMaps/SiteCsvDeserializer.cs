@@ -1,7 +1,6 @@
 ﻿namespace Encore.Web.CsvMaps
 {
     using CsvHelper;
-    using Encore.Web.CsvMaps;
     using Encore.Web.Models;
     using System.IO;
     

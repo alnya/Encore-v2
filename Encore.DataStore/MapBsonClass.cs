@@ -1,11 +1,7 @@
-﻿using MongoDB.Bson.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Encore.DataStore
+﻿namespace Encore.DataStore
 {
+    using MongoDB.Bson.Serialization;
+    
     public class MapBsonClass<T>
     {
         public static void IgnoreNull()

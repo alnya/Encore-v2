@@ -5,11 +5,6 @@
     using Encore.Domain.Services.Search;
     using Encore.Web.Security;
     using Nancy;
-    using Nancy.Security;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     
     public static class NancyContextExtensions
     {

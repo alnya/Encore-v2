@@ -2,13 +2,6 @@
 {
     using AutoMapper;
     using Encore.Web.Models;
-    using Encore.Web.Modules;
-    using Nancy;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using Nancy.Security;
     using Extensions;
     using Nancy.Responses;
 

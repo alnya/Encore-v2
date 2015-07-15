@@ -2,7 +2,6 @@
 {
     using Encore.Web.Mapping;
     using System;
-    using System.Collections.Generic;
 
     [MapsFrom(typeof(Domain.Entities.BusinessObjects.ReporDataSummary))]
     public class ReportDataSummary

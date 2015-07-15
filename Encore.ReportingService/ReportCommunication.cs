@@ -2,10 +2,8 @@ namespace Encore.ReportingService
 {
     using System;
     using System.Configuration;
-    using System.Net;
     using System.IO;
     using System.Net.Mail;
-    using System.Collections;
     using Encore.Domain.Interfaces.Services;
     using Encore.Domain.Entities;
     using Encore.Domain.Interfaces.DataStore;

@@ -1,12 +1,9 @@
 ﻿namespace Encore.Domain.Services
 {
+    using System;
     using Encore.Domain.Entities;
     using Encore.Domain.Interfaces.DataStore;
-    using Encore.Domain.Interfaces.Services;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     
     public class RequestStatusManager
     {
@@ -26,13 +23,26 @@
             this.requests = requests;
         }
 
-        public void SetStatus(RequestStatus status)
+        public void SetInProgress()
         {
-            if (report != null)
-            {
-                report.LastRequestStatus = status;
-                reportRepo.Merge(report.Id, report);
-            };
+            SetStatus(RequestStatus.InProgress);
+        }
+
+        public void SetCompleted(Guid resultId)
+        {
+            report.LastResultId = resultId;
+            SetStatus(RequestStatus.Complete);
+        }
+
+        public void SetFailed()
+        {
+            SetStatus(RequestStatus.Failed);
+        }
+
+        private void SetStatus(RequestStatus status)
+        {
+            report.LastRequestStatus = status;
+            reportRepo.Merge(report.Id, report);
 
             foreach(var request in requests)
             {
