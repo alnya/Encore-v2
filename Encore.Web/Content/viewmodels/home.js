@@ -4,7 +4,7 @@
         "use strict";
 
         var homeViewModel = new function(){
-            self = this;
+            var self = this;
             self.recentResults = ko.observableArray([]);
             self.GetData = function () {
                 messageBox.Hide();

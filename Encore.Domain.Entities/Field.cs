@@ -12,6 +12,8 @@
 
         public string Unit { get; set; }
 
+        public List<string> AlternativeNames { get; set; }
+
         public List<int> ProjectIds { get; set; }
     }
 }
