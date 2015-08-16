@@ -12,6 +12,7 @@
             Name: ko.observable().extend({ maxLength: 100, required: true }),
             Description: ko.observable().extend({ maxLength: 400, required: false }),
             ApiUrl: ko.observable().extend({ maxLength: 400, required: false }),
+            FieldPrefix: ko.observable().extend({ maxLength: 20, required: false }),
 
             SiteDataCount: ko.observable(),
             FieldDataCount: ko.observable(),
@@ -25,6 +26,7 @@
                 self.Name(objFromServer.Name);
                 self.Description(objFromServer.Description);
                 self.ApiUrl(objFromServer.ApiUrl);
+                self.FieldPrefix(objFromServer.FieldPrefix);
 
                 self.SiteDataCount(objFromServer.SiteDataCount);
                 self.FieldDataCount(objFromServer.FieldDataCount);
@@ -44,7 +46,8 @@
                 return {
                     Name: self.Name(),
                     Description: self.Description(),
-                    ApiUrl: self.ApiUrl()
+                    ApiUrl: self.ApiUrl(),
+                    FieldPrefix: self.FieldPrefix()
                 };
             },
 

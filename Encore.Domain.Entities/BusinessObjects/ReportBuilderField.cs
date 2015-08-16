@@ -8,6 +8,8 @@
 
         public string Name { get; set; }
 
+        public IEnumerable<string> AltNames { get; set; }
+
         public string Type { get; set; }
 
         public List<string> SiteIds { get; set; }

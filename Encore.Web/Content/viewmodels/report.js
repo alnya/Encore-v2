@@ -130,8 +130,12 @@
                 filter = filter.toLowerCase();
                 array = self.PreFilterArrayByNotSelected(selected, array);
                 return ko.utils.arrayFilter(array, function (item) {
-                    return (item.name.toLowerCase().indexOf(filter) > -1 ||
-                    item.type.toLowerCase().indexOf(filter) > -1);
+                    return (
+                        item.name.toLowerCase().indexOf(filter) > -1 ||
+                        item.type.toLowerCase().indexOf(filter) > -1 ||
+                        (ko.utils.arrayFirst(item.altNames, function (altName) {
+                            return altName.toLowerCase().indexOf(filter) > -1;
+                        }) != null));
                 })
             };
 
@@ -168,8 +172,11 @@
                 var field = ko.utils.arrayFirst(self.fieldData(), function (field) {
                     return field.id == id;
                 });
-                self.selectedFields.push(field);
-                self.selectedSiteFilter(self.siteFilters()[4]);
+
+                if (field != null){
+                    self.selectedFields.push(field);
+                    self.selectedSiteFilter(self.siteFilters()[4]);
+                }
             };
 
             self.removeFromSelectedFields = function () {
@@ -185,8 +192,11 @@
                 var site = ko.utils.arrayFirst(self.siteData(), function (site) {
                     return site.id == id;
                 });
-                self.selectedSites.push(site);
-                self.selectedFieldFilter(self.fieldFilters()[4]);
+
+                if (site != null) {
+                    self.selectedSites.push(site);
+                    self.selectedFieldFilter(self.fieldFilters()[4]);
+                }
             };
 
             self.removeFromSelectedSites = function () {
@@ -533,14 +543,20 @@
                     var field = ko.utils.arrayFirst(self.fieldData(), function (field) {
                         return field.id == fieldId;
                     });
-                    self.selectedFields.push(field);
+
+                    if (field != null) {
+                        self.selectedFields.push(field);
+                    }
                 });
 
                 ko.utils.arrayForEach(model.SiteIds, function (siteId) {
                     var site = ko.utils.arrayFirst(self.siteData(), function (site) {
                         return site.id == siteId;
                     });
-                    self.selectedSites.push(site);
+
+                    if (site != null) {
+                        self.selectedSites.push(site);
+                    }
                 });
 
                 self.selectedDateRange(moment(model.DateFrom).format(common.CLIENT_DATE_FORMAT) + " - " + moment(model.DateTo).format(common.CLIENT_DATE_FORMAT));

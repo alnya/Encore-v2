@@ -140,7 +140,7 @@
         private void GenerateReportRows(
             Guid resultId, Report report, Project project, IEnumerable<Site> reportSites, IEnumerable<Field> reportFields)
         {
-            var projectFields = project.Fields.Where(pf => reportFields.Any(rf => rf.ProjectIds.Any(id => id == pf.SourceId)));
+            var projectFields = project.Fields.Where(pf => reportFields.Any(rf => rf.ProjectIds.Any(id => id == project.FieldPrefix + pf.SourceId)));
             var projectSites = project.Sites.Where(ps => reportSites.Any(rs => String.Equals(rs.Name, ps.Name, StringComparison.OrdinalIgnoreCase)));
 
             // call API and get data
@@ -162,7 +162,7 @@
                 if (response.Rows != null)
                 {
                     log.InfoFormat("Received {0} rows of data", response.Rows.Count());
-                    var resultRows = GenerateReportRows(resultId, reportFields.ToProjectIdMap(), projectSites.ToProjectIdMap(), response.Rows);
+                    var resultRows = GenerateReportRows(resultId, reportFields.ToSourceIdMap(project.FieldPrefix), projectSites.ToProjectIdMap(), response.Rows);
                     resultRowRepo.Insert(resultRows);
                 }
             } 

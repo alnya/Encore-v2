@@ -150,7 +150,7 @@ WHERE {
                         Type = parentCategory.Name,
                         Unit = unitAltName != null ? unitAltName.Name : unit.Name,
                         AlternativeNames = fieldAltNames.Select(x => x.Name).ToList(),
-                        ProjectIds = requestProjectIds.Where(x => x.FieldId == conecpt.Id).Select(x => int.Parse(x.ProjectId)).ToList()
+                        ProjectIds = requestProjectIds.Where(x => x.FieldId == conecpt.Id).Select(x => x.ProjectId).ToList()
                     };
 
                     fields.Add(field);

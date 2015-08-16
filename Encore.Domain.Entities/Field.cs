@@ -14,6 +14,6 @@
 
         public List<string> AlternativeNames { get; set; }
 
-        public List<int> ProjectIds { get; set; }
+        public List<string> ProjectIds { get; set; }
     }
 }

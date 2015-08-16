@@ -17,6 +17,9 @@
         [StringLength(400, ErrorMessage = "ApiUrl cannot be greater than 400 characters.")]
         public string ApiUrl { get; set; }
 
+        [StringLength(20, ErrorMessage = "FieldPrefix cannot be greater than 20 characters.")]
+        public string FieldPrefix { get; set; }
+
         public DateTime? DataLastUpdated { get; set; }
 
         public int SiteDataCount { get; set; }
