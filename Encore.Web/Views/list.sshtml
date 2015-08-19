@@ -11,7 +11,7 @@
 	</script>
 	@Partial['includes/_knockoutTableTemplate.html'];
 	@Partial['includes/BackButton.sshtml'];
-	<script type="text/javascript" src="\Content\viewmodels\@Model.ViewModel;.js"></script>
+	<script type="text/javascript" src="/Content/viewmodels/@Model.ViewModel;.js"></script>
 </div>
 
 @EndSection

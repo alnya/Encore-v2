@@ -1,28 +1,15 @@
 ﻿namespace Encore.Web.Modules
 {
-    using Nancy;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using Nancy.ModelBinding;
-    using Nancy.Security;
-    using Encore.Domain.Interfaces.Services;
     using Encore.Web.Models;
-    using Encore.Domain.Entities;
     using AutoMapper;
     using Extensions;
-    using Nancy.Session;
-    
+
     public class PagesModule : BaseModule
     {
-        private readonly IUserService userService;
 
-        public PagesModule(IUserService userService, IMappingEngine mappingEngine)
+        public PagesModule(IMappingEngine mappingEngine)
             : base("", mappingEngine)
         {
-            this.userService = userService;
-
             Get["/"] = GetLogin;
 
             Get["/login"] = GetLogin;

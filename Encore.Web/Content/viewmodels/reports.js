@@ -8,7 +8,8 @@
                 { name: "Report Name", value: "Name", sortDescending: false, template: "nameCellTemplate" },
                 { name: "Request Status", value: "LastRequestStatus", dataType: "List", filterValues: ['Pending', 'InProgress', 'Failed', 'Complete'] },
                 { name: "Last Requested", value: "LastRequested", filterable: false, dataType: "Date" },
-                { name: "Action", template: "requestButtonCellTemplate", filterable: false, sortable: false }
+                { name: "Request", template: "requestButtonCellTemplate", filterable: false, sortable: false },
+                { name: "View", template: "viewResultsButtonCellTemplate", filterable: false, sortable: false }
             ],
             sortable: true,
             filterMode: 'search',
@@ -33,6 +34,10 @@
             function (errorResponse) {
                 messageBox.ShowErrors("Report Request Failed:", errorResponse);
             });
+        };
+
+        reportsViewModel.tableViewModel.ViewResults = function (id) {
+            window.location.replace("/pages/reports/results/" + id);
         };
 
         return reportsViewModel;

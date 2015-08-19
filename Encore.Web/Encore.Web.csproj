@@ -100,7 +100,6 @@
     <Compile Include="Models\ReportBuilderData.cs" />
     <Compile Include="Models\ReportBuilderField.cs" />
     <Compile Include="Models\ReportBuilderSite.cs" />
-    <Compile Include="Models\ReportData.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Models\ReportDataSummary.cs" />
     <Compile Include="Models\ReportResultAvailable.cs" />

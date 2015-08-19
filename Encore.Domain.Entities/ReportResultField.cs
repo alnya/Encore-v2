@@ -1,7 +1,5 @@
 ﻿namespace Encore.Domain.Entities
 {
-    using System;
-    
     public class ReportResultField
     {
         public string FieldId { get; set; }

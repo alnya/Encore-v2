@@ -45,6 +45,13 @@ WHERE {
     ?id skos:hiddenLabel ?projectId;
 }";
 
+        private const string AlternativeLabelQuery =
+@"PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+SELECT ?id ?name
+WHERE {
+    ?id skos:altLabel ?name;
+}";
+
         private class ConceptResult
         {
             public string Id { get; set; }
@@ -62,6 +69,12 @@ WHERE {
         {
             public string FieldId { get; set; }
             public string ProjectId { get; set; }
+        }
+
+        private class AlternativeLabelResult
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
         }
 
         public PoolPartyClient(string projectUrl, string userName, string password)
@@ -84,13 +97,15 @@ WHERE {
                 List<ConceptResult> requestConcepts = await RequestConceptsAsync(client, token);
                 List<ConceptRelation> requestRelations = await RequestConceptRelationsAsync(client, token);
                 List<ProjectIdResult> requestProjectIds = await RequestProjectIdsAsync(client, token);
+                List<AlternativeLabelResult> requestAlternativeLabels = await RequestAlternativeLabelsAsync(client, token);
 
-                if (requestConcepts != null && requestRelations != null && requestProjectIds != null)
+                if (requestConcepts != null && requestRelations != null && requestProjectIds != null && requestAlternativeLabels != null)
                 {
                     return CreateFields(
                         requestConcepts,
                         requestRelations,
-                        requestProjectIds);
+                        requestProjectIds,
+                        requestAlternativeLabels);
                 }
             }
 
@@ -100,7 +115,8 @@ WHERE {
         private IEnumerable<Field> CreateFields(
             List<ConceptResult> requestConcepts, 
             List<ConceptRelation> conceptRelations, 
-            List<ProjectIdResult> requestProjectIds)
+            List<ProjectIdResult> requestProjectIds,
+            List<AlternativeLabelResult> requestAlternativeLabels)
         {
             ConceptResult allMeasurements = requestConcepts.FirstOrDefault(x => String.Equals(x.Name, "measurements", StringComparison.OrdinalIgnoreCase));
             ConceptResult allUnits = requestConcepts.FirstOrDefault(x => String.Equals(x.Name, "units", StringComparison.OrdinalIgnoreCase));
@@ -124,13 +140,17 @@ WHERE {
 
                 if(parentCategory != null && unit != null)
                 {
+                    var unitAltName = requestAlternativeLabels.FirstOrDefault(x => x.Id == unit.Id);
+                    var fieldAltNames = requestAlternativeLabels.Where(x => x.Id == conecpt.Id);
+
                     var field = new Field
                     {
                         SourceId = conecpt.Id,
                         Name = conecpt.Name,
                         Type = parentCategory.Name,
-                        Unit = unit.Name,
-                        ProjectIds = requestProjectIds.Where(x => x.FieldId == conecpt.Id).Select(x => int.Parse(x.ProjectId)).ToList()
+                        Unit = unitAltName != null ? unitAltName.Name : unit.Name,
+                        AlternativeNames = fieldAltNames.Select(x => x.Name).ToList(),
+                        ProjectIds = requestProjectIds.Where(x => x.FieldId == conecpt.Id).Select(x => x.ProjectId).ToList()
                     };
 
                     fields.Add(field);
@@ -218,6 +238,31 @@ WHERE {
             return null;
         }
 
+        private async Task<List<AlternativeLabelResult>> RequestAlternativeLabelsAsync(HttpClient client, CancellationToken token)
+        {
+            log.Info("Getting Concept alternative labels from Pool Party");
+
+            var queryResult = await RequestDynamicResultAsync(client, AlternativeLabelQuery, token);
+
+            if (queryResult != null)
+            {
+                var labelResults = new List<AlternativeLabelResult>();
+
+                foreach (var result in queryResult.results.bindings)
+                {
+                    labelResults.Add(new AlternativeLabelResult
+                    {
+                        Id = result.id.value,
+                        Name = result.name.value
+                    });
+                }
+
+                return labelResults;
+            }
+
+            return null;
+        }
+        
         private async Task<dynamic> RequestDynamicResultAsync(HttpClient client, string query, CancellationToken token)
         {
             var requestContent = new FormUrlEncodedContent(new[] 

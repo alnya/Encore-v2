@@ -69,7 +69,7 @@
     </div>   
 
 	@Partial['includes/BackButton.sshtml'];
-	<script type="text/javascript" src="\Content\viewmodels\results.js"></script>
+	<script type="text/javascript" src="/Content/viewmodels/results.js"></script>
 </div>
 
 @EndSection

@@ -16,6 +16,11 @@
 							<div data-bind="template: { name: 'formFieldString', data: {Property: 'Name', Name: 'Name'} }"></div>
 						</div>
 						<div class="col-sm-6">
+							<div data-bind="template: { name: 'formFieldString', data: {Property: 'FieldPrefix', Name: 'Field Prefix'} }"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
 							<div class="form-group" id="ApiUrl" data-bind="validationElement: ApiUrl">
 								<label class="control-label">Project URL</label>
 								<p class="form-control-static" data-bind="text: ApiUrl, visible: $root.IsInMode('VIEW')"></p>

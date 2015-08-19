@@ -142,7 +142,7 @@
                     reportSite.Projects = inProjects.Select(x => x.Name).ToList();                   
 
                     // Get all project field Ids present in summary data for this site, map to global Field Ids
-                    var projectFieldIds = inProjects.SelectMany(p => p.SiteSummaries.Where(summary => SiteFoundInSummary(projectSiteIdMap, site, summary)).Select(s => s.FieldSourceId)).Distinct().ToList();
+                    var projectFieldIds = inProjects.SelectMany(p => p.SiteSummaries.Where(summary => SiteFoundInSummary(projectSiteIdMap, site, summary)).Select(s => p.FieldPrefix + s.FieldSourceId)).Distinct().ToList();
                     reportSite.FieldIds = fields.Where(f => f.ProjectIds.Any(id => projectFieldIds.Any(x => x == id))).Select(f => f.SourceId).ToList();
                     
                     if (reportSite.FieldIds.Any())
@@ -164,11 +164,12 @@
                     Id = field.SourceId,
                     Name = field.Name,
                     Type = field.Type,
+                    AltNames = field.AlternativeNames,
                     Projects = new List<string>(),
                     SiteIds = new List<string>()
                 };
 
-                var inProjects = projects.Where(p => p.SiteSummaries.Any(s => field.ProjectIds.Any(fid => s.FieldSourceId == fid))).ToList();
+                var inProjects = projects.Where(p => p.SiteSummaries.Any(s => field.ProjectIds.Any(fid => p.FieldPrefix + s.FieldSourceId == fid))).ToList();
 
                 if (inProjects.Any())
                 {
@@ -176,7 +177,7 @@
 
                     // Get all project site Ids present in summary data for this site, map to global Site Ids
                     var projectSiteIds = inProjects.
-                        SelectMany(p => p.SiteSummaries.Where(x => field.ProjectIds.Any(fid => x.FieldSourceId == fid))).Select(s => s.SiteSourceId).
+                        SelectMany(p => p.SiteSummaries.Where(x => field.ProjectIds.Any(fid => p.FieldPrefix + x.FieldSourceId == fid))).Select(s => s.SiteSourceId).
                         Distinct().ToList();
 
                     reportField.SiteIds = projectSiteIds.Where(x => projectSiteIdMap.ContainsKey(x)).Select(x => projectSiteIdMap[x].ToString()).ToList();
@@ -205,12 +206,12 @@
 
             var siteNames = siteRepo.GetWhere(x => siteIds.Any(id => new Guid(id) == x.Id)).Select(x => x.Name);
             var projectSiteIds = projects.SelectMany(p => p.Sites.Where(s => siteNames.Any(name => String.Equals(name, s.Name, StringComparison.OrdinalIgnoreCase))).Select(x => x.SourceId).ToList());
-
+            
             var projectRows = projects.SelectMany(p => p.SiteSummaries.Where(s =>
                 s.ValueMinDate >= fromDate &&
                 s.ValueMaxDate <= toDate &&
                 projectSiteIds.Any(id => id == s.SiteSourceId) &&
-                projectFieldIds.Any(id => id == s.FieldSourceId))).ToList();
+                projectFieldIds.Any(id => id == p.FieldPrefix + s.FieldSourceId))).ToList();
 
             if (projectRows.Count == 0)
             {

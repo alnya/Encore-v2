@@ -1,7 +1,5 @@
 ﻿namespace Encore.Domain.Entities
 {
-    using System;
-
     public class SystemUser : EntityBase, IAuthorizedUser
     {
         public string Name { get; set; }

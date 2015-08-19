@@ -20,5 +20,7 @@
         public DateTime LastRequested { get; set; }
 
         public RequestStatus LastRequestStatus { get; set; }
+
+        public Guid? LastResultId { get; set; }
     }
 }

@@ -4,10 +4,8 @@
     using Encore.Domain.Interfaces.DataStore;
     using MongoDB.Driver;
     using MongoDB.Driver.Builders;
+    using MongoMigrations;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     public class MongoContext : IRepositoryContext
     {
@@ -24,6 +22,15 @@
             MapBsonClass<Project>.IgnoreNull();
             var collection = database.GetCollection<ReportResultRow>("ReportResultRow");
             collection.CreateIndex(IndexKeys<ReportResultRow>.Ascending(x => x.ReportResultId));
+
+            var assembly = System.Reflection.Assembly.GetAssembly(typeof(MongoContext));
+            var runner = new MigrationRunner("mongodb://localhost", dbName);
+            runner.MigrationLocator.LookForMigrationsInAssembly(assembly);
+
+            if(runner.DatabaseStatus.IsNotLatestVersion())
+            {
+                runner.UpdateToLatest();
+            }
         }
 
         public void TryConnect()

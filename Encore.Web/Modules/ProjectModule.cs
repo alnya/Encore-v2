@@ -3,7 +3,6 @@
     using AutoMapper;
     using Encore.Domain.Interfaces.Services;
     using Nancy;
-    using Nancy.Security;
     using System;
     using Extensions;
     using Encore.Domain.Entities;

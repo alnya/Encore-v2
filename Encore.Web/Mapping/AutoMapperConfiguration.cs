@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
-    using Models;
 
     public static class AutoMapperConfiguration
     {

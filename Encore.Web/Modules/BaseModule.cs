@@ -3,7 +3,6 @@
     using Nancy;
     using Nancy.Responses.Negotiation;
     using Nancy.Validation;
-    using System;
     using System.Linq;
     using System.Collections.Generic;
     using AutoMapper;

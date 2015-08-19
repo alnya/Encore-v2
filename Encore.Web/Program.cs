@@ -1,6 +1,5 @@
 ﻿namespace Encore.Web
 {
-    using System;
     using log4net.Config;
     using log4net;
     using Topshelf;
