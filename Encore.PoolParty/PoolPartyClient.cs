@@ -47,11 +47,17 @@ WHERE {
 
         private const string AlternativeLabelQuery =
 @"PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-SELECT ?id ?name
+SELECT ?id ?value
 WHERE {
-    ?id skos:altLabel ?name;
+    ?id skos:altLabel ?value;
 }";
 
+        private const string DefinitionQuery =
+@"PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+SELECT ?id ?value
+WHERE {
+    ?id skos:definition ?value;
+}";
         private class ConceptResult
         {
             public string Id { get; set; }
@@ -71,10 +77,10 @@ WHERE {
             public string ProjectId { get; set; }
         }
 
-        private class AlternativeLabelResult
+        private class KeyValueResult
         {
             public string Id { get; set; }
-            public string Name { get; set; }
+            public string Value { get; set; }
         }
 
         public PoolPartyClient(string projectUrl, string userName, string password)
@@ -97,7 +103,12 @@ WHERE {
                 List<ConceptResult> requestConcepts = await RequestConceptsAsync(client, token);
                 List<ConceptRelation> requestRelations = await RequestConceptRelationsAsync(client, token);
                 List<ProjectIdResult> requestProjectIds = await RequestProjectIdsAsync(client, token);
-                List<AlternativeLabelResult> requestAlternativeLabels = await RequestAlternativeLabelsAsync(client, token);
+
+                log.Info("Getting Concept alternative labels from Pool Party");
+                List<KeyValueResult> requestAlternativeLabels = await RequestKeyValuesAsync(client, AlternativeLabelQuery, token);
+
+                log.Info("Getting Concept definitions from Pool Party");
+                List<KeyValueResult> requestDefinitions = await RequestKeyValuesAsync(client, DefinitionQuery, token);
 
                 if (requestConcepts != null && requestRelations != null && requestProjectIds != null && requestAlternativeLabels != null)
                 {
@@ -105,7 +116,8 @@ WHERE {
                         requestConcepts,
                         requestRelations,
                         requestProjectIds,
-                        requestAlternativeLabels);
+                        requestAlternativeLabels,
+                        requestDefinitions);
                 }
             }
 
@@ -116,7 +128,8 @@ WHERE {
             List<ConceptResult> requestConcepts, 
             List<ConceptRelation> conceptRelations, 
             List<ProjectIdResult> requestProjectIds,
-            List<AlternativeLabelResult> requestAlternativeLabels)
+            List<KeyValueResult> requestAlternativeLabels,
+            List<KeyValueResult> requestDefinitions)
         {
             ConceptResult allMeasurements = requestConcepts.FirstOrDefault(x => String.Equals(x.Name, "measurements", StringComparison.OrdinalIgnoreCase));
             ConceptResult allUnits = requestConcepts.FirstOrDefault(x => String.Equals(x.Name, "units", StringComparison.OrdinalIgnoreCase));
@@ -142,14 +155,16 @@ WHERE {
                 {
                     var unitAltName = requestAlternativeLabels.FirstOrDefault(x => x.Id == unit.Id);
                     var fieldAltNames = requestAlternativeLabels.Where(x => x.Id == conecpt.Id);
+                    var fieldDefinitions = requestDefinitions.Where(x => x.Id == conecpt.Id);
 
                     var field = new Field
                     {
                         SourceId = conecpt.Id,
                         Name = conecpt.Name,
                         Type = parentCategory.Name,
-                        Unit = unitAltName != null ? unitAltName.Name : unit.Name,
-                        AlternativeNames = fieldAltNames.Select(x => x.Name).ToList(),
+                        Unit = unitAltName != null ? unitAltName.Value : unit.Name,
+                        AlternativeNames = fieldAltNames.Select(x => x.Value).ToList(),
+                        Definitions = fieldDefinitions.Select(x => x.Value).ToList(),
                         ProjectIds = requestProjectIds.Where(x => x.FieldId == conecpt.Id).Select(x => x.ProjectId).ToList()
                     };
 
@@ -238,26 +253,25 @@ WHERE {
             return null;
         }
 
-        private async Task<List<AlternativeLabelResult>> RequestAlternativeLabelsAsync(HttpClient client, CancellationToken token)
+        private async Task<List<KeyValueResult>> RequestKeyValuesAsync(HttpClient client, string query, CancellationToken token)
         {
-            log.Info("Getting Concept alternative labels from Pool Party");
 
-            var queryResult = await RequestDynamicResultAsync(client, AlternativeLabelQuery, token);
+            var queryResult = await RequestDynamicResultAsync(client, DefinitionQuery, token);
 
             if (queryResult != null)
             {
-                var labelResults = new List<AlternativeLabelResult>();
+                var results = new List<KeyValueResult>();
 
                 foreach (var result in queryResult.results.bindings)
                 {
-                    labelResults.Add(new AlternativeLabelResult
+                    results.Add(new KeyValueResult
                     {
                         Id = result.id.value,
-                        Name = result.name.value
+                        Value = result.value.value
                     });
                 }
 
-                return labelResults;
+                return results;
             }
 
             return null;

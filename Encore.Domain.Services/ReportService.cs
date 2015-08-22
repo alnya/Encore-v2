@@ -93,7 +93,7 @@
             var projects = projectRepo.GetWhere(p => p.SiteSummaries != null && p.SiteSummaries.Any(s => s.RowCount > 0));
 
             foreach(var project in projects)
-            {
+            {               
                 // Strip summary entries with 0 rows.
                 project.SiteSummaries = project.SiteSummaries.Where(x => x.RowCount > 0).ToList();
             }
@@ -154,6 +154,7 @@
 
             builderData.SiteData.AddRange(siteData.OrderBy(x => x.Name));
             
+
             // Get field data
             var fieldData = new List<ReportBuilderField>();
 
@@ -165,6 +166,7 @@
                     Name = field.Name,
                     Type = field.Type,
                     AltNames = field.AlternativeNames,
+                    Definitions = field.Definitions,
                     Projects = new List<string>(),
                     SiteIds = new List<string>()
                 };

@@ -79,12 +79,24 @@
             self.ShowSiteInfo = function () {
                 self.infoSite(this.id());
                 self.infoField('');
+                self.infoDescription('');
                 $('#infoModal').modal('show');
             },
 
             self.ShowFieldInfo = function () {
                 self.infoSite('');
                 self.infoField(this.id());
+
+                var displayField = ko.utils.arrayFirst(self.fieldData(), function (field) {
+                    return field.id == self.infoField();
+                });
+
+                if (displayField != null) {
+                    self.infoDescription(displayField.definitions.join());
+                } else {
+                    self.infoDescription('');
+                }
+
                 $('#infoModal').modal('show');
             },
 
@@ -210,6 +222,8 @@
             self.infoSite = ko.observable();
 
             self.infoField = ko.observable();
+
+            self.infoDescription = ko.observable();
 
             self.infoNodes = ko.computed(function () {
                 var result = [];

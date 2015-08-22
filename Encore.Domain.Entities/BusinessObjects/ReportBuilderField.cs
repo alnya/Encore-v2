@@ -10,6 +10,8 @@
 
         public IEnumerable<string> AltNames { get; set; }
 
+        public IEnumerable<string> Definitions { get; set; }
+
         public string Type { get; set; }
 
         public List<string> SiteIds { get; set; }

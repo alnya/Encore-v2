@@ -93,7 +93,7 @@
 
             try
             {
-                var projectTasks = new List<Task>();
+                var projectTasks = new List<Task<IEnumerable<ReportResultRow>>>();
 
                 var reportResult = new ReportResult
                 {
@@ -112,6 +112,15 @@
                 }
 
                 Task.WaitAll(projectTasks.ToArray());
+
+                var reportResults = new List<ReportResultRow>();
+
+                foreach (var task in projectTasks)
+                {
+                    reportResults.AddRange(task.Result);
+                }
+
+                resultRowRepo.Insert(reportResults.OrderByDescending(x => x.RowDateTime));
 
                 statusManager.SetCompleted(reportResult.Id);
                 return reportResult;
@@ -137,7 +146,7 @@
             }
         }
 
-        private void GenerateReportRows(
+        private IEnumerable<ReportResultRow> GenerateReportRows(
             Guid resultId, Report report, Project project, IEnumerable<Site> reportSites, IEnumerable<Field> reportFields)
         {
             var projectFields = project.Fields.Where(pf => reportFields.Any(rf => rf.ProjectIds.Any(id => id == project.FieldPrefix + pf.SourceId)));
@@ -162,10 +171,11 @@
                 if (response.Rows != null)
                 {
                     log.InfoFormat("Received {0} rows of data", response.Rows.Count());
-                    var resultRows = GenerateReportRows(resultId, reportFields.ToSourceIdMap(project.FieldPrefix), projectSites.ToProjectIdMap(), response.Rows);
-                    resultRowRepo.Insert(resultRows);
+                    return GenerateReportRows(resultId, reportFields.ToSourceIdMap(project.FieldPrefix), projectSites.ToProjectIdMap(), response.Rows);
                 }
-            } 
+            }
+
+            return new List<ReportResultRow>();
         }
 
         private IEnumerable<ReportResultRow> GenerateReportRows(
