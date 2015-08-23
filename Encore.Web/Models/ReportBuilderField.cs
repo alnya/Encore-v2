@@ -14,6 +14,8 @@
 
         public IEnumerable<string> altNames { get; set; }
 
+        public IEnumerable<string> definitions { get; set; }
+
         public IEnumerable<string> siteIds { get; set; }
 
         public IEnumerable<string> projects { get; set; }

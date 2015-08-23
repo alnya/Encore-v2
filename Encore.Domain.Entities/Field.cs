@@ -13,6 +13,8 @@
         public string Unit { get; set; }
 
         public List<string> AlternativeNames { get; set; }
+            
+        public List<string> Definitions { get; set; }
 
         public List<string> ProjectIds { get; set; }
     }
