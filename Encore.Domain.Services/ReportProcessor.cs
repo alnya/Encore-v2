@@ -120,7 +120,7 @@
                     reportResults.AddRange(task.Result);
                 }
 
-                resultRowRepo.Insert(reportResults.OrderByDescending(x => x.RowDateTime));
+                resultRowRepo.Insert(reportResults.OrderBy(x => x.SiteName).ThenBy(x => x.RowDateTime));
 
                 statusManager.SetCompleted(reportResult.Id);
                 return reportResult;
