@@ -117,10 +117,11 @@
 
                 foreach (var task in projectTasks)
                 {
-                    reportResults.AddRange(task.Result);
+                    var rows = task.Result.Where(row => row.Fields.Any(f => !String.IsNullOrEmpty(f.Value)));
+                    reportResults.AddRange(rows);
                 }
 
-                resultRowRepo.Insert(reportResults.OrderByDescending(x => x.RowDateTime));
+                resultRowRepo.Insert(reportResults.OrderBy(x => x.SiteName).ThenBy(x => x.RowDateTime));
 
                 statusManager.SetCompleted(reportResult.Id);
                 return reportResult;

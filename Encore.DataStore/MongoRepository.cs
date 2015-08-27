@@ -61,9 +61,16 @@
             return GetQueryable().Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public int Count(ISearchTerms searchTerms)
+        public int Count(ISearchTerms searchTerms, Func<T, bool> predicate = null)
         {
-            return GetQueryable().Where(searchTerms).Count();
+            var queryable = GetQueryable();
+
+            if (predicate != null)
+            {
+                queryable = queryable.Where(predicate).AsQueryable();
+            }
+
+            return queryable.Where(searchTerms).Count();
         }
 
         public int Count<TValue>(Expression<Func<T, TValue>> func, TValue value)
@@ -77,7 +84,7 @@
             return GetQueryable().Any(predicate);
         }
 
-        public IEnumerable<T> Search(Func<T, bool> predicate, ISortCriteria sortCriteria, ISearchTerms searchTerms, IRequestedPage requestedPage)
+        public IEnumerable<T> Search(ISearchTerms searchTerms, Func<T, bool> predicate, ISortCriteria sortCriteria, IRequestedPage requestedPage)
         {
             var queryable = GetQueryable();
 

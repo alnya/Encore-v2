@@ -25,8 +25,8 @@
         {
             var entityRepo = context.GetRepository<T>();
 
-            var results = entityRepo.Search(predicate, sortCriteria, searchTerms, requestedPage);
-            var count = entityRepo.Count(searchTerms);
+            var results = entityRepo.Search(searchTerms, predicate, sortCriteria, requestedPage);
+            var count = entityRepo.Count(searchTerms, predicate);
 
             return new PagedListResult<T>(results, count);
         }

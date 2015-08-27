@@ -14,7 +14,7 @@
 
         IEnumerable<T> GetWhere(Func<T, bool> predicate = null, IRequestedPage requestedPage = null);
 
-        IEnumerable<T> Search(Func<T, bool> predicate, ISortCriteria sortCriteria, ISearchTerms searchTerms, IRequestedPage requestedPage);
+        IEnumerable<T> Search(ISearchTerms searchTerms, Func<T, bool> predicate, ISortCriteria sortCriteria, IRequestedPage requestedPage);
 
         void Save(T entity);
 
@@ -26,7 +26,7 @@
 
         void DeleteAll();
 
-        int Count(ISearchTerms searchTerms);
+        int Count(ISearchTerms searchTerms, Func<T, bool> predicate = null);
 
         int Count<TValue>(Expression<Func<T, TValue>> func, TValue value);
 

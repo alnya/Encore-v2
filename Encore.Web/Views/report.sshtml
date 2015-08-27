@@ -67,7 +67,7 @@
 							<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
 							<input type="text" data-bind="value:selectedDateRange" class="form-control" id="ReportDate" placeholder="YYYY/MM/DD - YYYY/MM/DD">
 						</div>
-						<p class="help-block" data-bind="visible:rowCount">Data available from <span data-bind="text:dateFrom"></span> to <span data-bind="text:dateTo"></span></p>
+						<p class="help-block" data-bind="visible:dataAvailable">Data available from <span data-bind="text:dateFrom"></span> to <span data-bind="text:dateTo"></span></p>
 					</div>
 				</div>
 			</div>
@@ -78,7 +78,8 @@
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-sm-12">
-							<p>There are <strong data-bind="text:rowCount">0</strong> rows of data available based on your selection.</p>
+							<p data-bind="visible:dataAvailable">There is data available based on your selection.</p>
+							<p data-bind="visible:!dataAvailable">There is no data available based on your selection.</p>
 						</div>
 					</div>
 					<div class="row">
@@ -91,7 +92,7 @@
 					</div>
 					<div class="row">
 						<div class="col-sm-12">
-							<button type="button" class="btn btn-success" data-bind="enable: rowCount, click: SaveReport"><span class="glyphicon glyphicon-ok"></span> Request Report</button>
+							<button type="button" class="btn btn-success" data-bind="enable: dataAvailable, click: SaveReport"><span class="glyphicon glyphicon-ok"></span> Request Report</button>
 							<button type="button" class="btn btn-danger" data-bind="click: Reset"><span class="glyphicon glyphicon-remove"></span> Reset</button>
 							<button id="deleteButton" type="button" class="btn btn-default pull-right" data-bind="click: ShowDeleteDialog, visible: CanDeleteEntity()">
 								<span class="glyphicon glyphicon-trash"></span> Delete

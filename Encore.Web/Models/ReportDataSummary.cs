@@ -10,6 +10,6 @@
 
         public DateTime dateTo { get; set; }
 
-        public int rows { get; set; }
+        public bool dataAvailable { get; set; }
     }
 }
