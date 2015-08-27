@@ -37,14 +37,14 @@
             self.SiteSearch = ko.observable('');
             self.FieldSearch = ko.observable('');
 
-            self.rowCount = ko.computed(function () {
-                return self.selectedFields().length > 0 && self.selectedSites().length ? self.summaryData().rows : 0;
+            self.dataAvailable = ko.computed(function () {
+                return self.selectedFields().length > 0 && self.selectedSites().length ? self.summaryData().dataAvailable : 0;
             }, this);
             self.dateFrom = ko.computed(function () {
-                return self.selectedFields().length > 0 && self.selectedSites().length && self.summaryData().rows > 0 ? moment(self.summaryData().dateFrom).format(common.CLIENT_DATE_FORMAT) : '';
+                return self.selectedFields().length > 0 && self.selectedSites().length && self.summaryData().dataAvailable ? moment(self.summaryData().dateFrom).format(common.CLIENT_DATE_FORMAT) : '';
             }, this);
             self.dateTo = ko.computed(function () {
-                return self.selectedFields().length > 0 && self.selectedSites().length && self.summaryData().rows > 0 ? moment(self.summaryData().dateTo).format(common.CLIENT_DATE_FORMAT) : '';
+                return self.selectedFields().length > 0 && self.selectedSites().length && self.summaryData().dataAvailable ? moment(self.summaryData().dateTo).format(common.CLIENT_DATE_FORMAT) : '';
             }, this);
 
             self.selectedSiteFilter = ko.observable();

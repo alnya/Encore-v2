@@ -210,8 +210,7 @@
             var projectSiteIds = projects.SelectMany(p => p.Sites.Where(s => siteNames.Any(name => String.Equals(name, s.Name, StringComparison.OrdinalIgnoreCase))).Select(x => x.SourceId).ToList());
             
             var projectRows = projects.SelectMany(p => p.SiteSummaries.Where(s =>
-                s.ValueMinDate >= fromDate &&
-                s.ValueMaxDate <= toDate &&
+                (s.ValueMinDate < toDate && fromDate < s.ValueMaxDate) &&
                 projectSiteIds.Any(id => id == s.SiteSourceId) &&
                 projectFieldIds.Any(id => id == p.FieldPrefix + s.FieldSourceId))).ToList();
 
@@ -222,9 +221,9 @@
 
             return new ReporDataSummary
             {
-                DateFrom = projectRows.Min(x => x.ValueMinDate),
-                DateTo = projectRows.Max(x => x.ValueMaxDate),
-                Rows = projectRows.Sum(x => x.RowCount)
+                DateFrom = projectRows.Min(x => x.ValueMinDate.Date),
+                DateTo = projectRows.Max(x => x.ValueMaxDate.Date.AddDays(1)),
+                DataAvailable = projectRows.Any(x => x.RowCount > 0)
             };
         }
 

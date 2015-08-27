@@ -9,6 +9,6 @@
 
         public DateTime DateTo { get; set; }
 
-        public int Rows { get; set; }
+        public bool DataAvailable { get; set; }
     }
 }

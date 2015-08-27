@@ -236,7 +236,7 @@
 
             return new Encore.Web.Models.ReportDataSummary
             {
-                rows = 0
+                dataAvailable = false
             };
         }
     }

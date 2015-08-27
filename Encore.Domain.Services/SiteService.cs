@@ -21,7 +21,7 @@
         {
             var siteRepo = context.GetRepository<Site>();
 
-            var results = siteRepo.Search(null, sortCriteria, searchTerms, requestedPage);
+            var results = siteRepo.Search(searchTerms, null, sortCriteria, requestedPage);
             var count = siteRepo.Count(searchTerms);
 
             return new PagedListResult<Site>(results, count);
