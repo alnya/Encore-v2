@@ -110,7 +110,11 @@ WHERE {
                 log.Info("Getting Concept definitions from Pool Party");
                 List<KeyValueResult> requestDefinitions = await RequestKeyValuesAsync(client, DefinitionQuery, token);
 
-                if (requestConcepts != null && requestRelations != null && requestProjectIds != null && requestAlternativeLabels != null)
+                if (requestConcepts != null && 
+                    requestRelations != null && 
+                    requestProjectIds != null && 
+                    requestAlternativeLabels != null &&
+                    requestDefinitions != null)
                 {
                     return CreateFields(
                         requestConcepts,
@@ -256,7 +260,7 @@ WHERE {
         private async Task<List<KeyValueResult>> RequestKeyValuesAsync(HttpClient client, string query, CancellationToken token)
         {
 
-            var queryResult = await RequestDynamicResultAsync(client, DefinitionQuery, token);
+            var queryResult = await RequestDynamicResultAsync(client, query, token);
 
             if (queryResult != null)
             {
