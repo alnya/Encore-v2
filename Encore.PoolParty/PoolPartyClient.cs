@@ -285,6 +285,7 @@ WHERE {
         {
             var requestContent = new FormUrlEncodedContent(new[] 
                 {
+                    new KeyValuePair<string, string>("default-graph-uri", "urn:x-evn-pub:encore"),
                     new KeyValuePair<string, string>("query", query)
                 });
 
