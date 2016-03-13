@@ -5,12 +5,11 @@
 
         var userViewModel = ko.validatedObservable({
 
-            EntityName: "User",
-            Url: "/users/",
-            CanDeleteEntity: true,
+            EntityName: "My Account",
+            Url: "/users/myAccount",
+            CanDeleteEntity: false,
             Name: ko.observable().extend({ maxLength: 40, required: true }),
             Email: ko.observable().extend({ maxLength: 100, required: false }),
-            UserRole: ko.observable().extend({ required: true }),
             Password: ko.observable().extend({ maxLength: 128, required: true }),
             PasswordConfirm: ko.observable(),
 
@@ -22,7 +21,6 @@
                 self.Password(objFromServer.Password);
                 self.PasswordConfirm(objFromServer.Password);
                 self.Email(objFromServer.Email);
-                self.UserRole(objFromServer.UserRole);
             },
 
             GetEntityModel: function () {
@@ -31,8 +29,7 @@
                 return {
                     Name: self.Name(),
                     Password: self.Password(),
-                    Email: self.Email(),
-                    UserRole: self.UserRole()
+                    Email: self.Email()
                 };
             }
         });

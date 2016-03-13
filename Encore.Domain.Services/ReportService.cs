@@ -152,8 +152,7 @@
                 }
             };
 
-            builderData.SiteData.AddRange(siteData.OrderBy(x => x.Name));
-            
+            builderData.SiteData.AddRange(siteData.OrderBy(x => x.Name));            
 
             // Get field data
             var fieldData = new List<ReportBuilderField>();

@@ -50,6 +50,7 @@
     <Compile Include="BusinessObjects\ReportBuilderSite.cs" />
     <Compile Include="BusinessObjects\ReportResultColumn.cs" />
     <Compile Include="BusinessObjects\ReportResultsResponse.cs" />
+    <Compile Include="ProjectPassword.cs" />
     <Compile Include="ReportResultField.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="Enums.cs" />

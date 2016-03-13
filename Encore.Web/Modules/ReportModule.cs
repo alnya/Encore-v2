@@ -14,13 +14,12 @@
     {
         private const string FieldNameFormat = "{0} {1}";
         private const string RowDateFormat = "yyyy/MM/dd HH:mm";
-
         private readonly IReportService reportService;
 
         private readonly IReportResultService reportResultService;
 
         public ReportModule(IReportService reportService, IReportResultService reportResultService, IMappingEngine mappingEngine)
-            : base("data/reports", mappingEngine)
+            : base("data/reports", mappingEngine, UserRole.Standard)
         {
             this.reportService = reportService;
             this.reportResultService = reportResultService;

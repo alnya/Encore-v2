@@ -1,9 +1,11 @@
 ﻿namespace Encore.Web.Models
 {
     using Encore.Web.Mapping;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     [MapsFrom(typeof(Domain.Entities.SystemUser))]
+    [MapsTo(typeof(Domain.Entities.SystemUser))]
     public class User : BaseModel
     {
         [Required, StringLength(40, ErrorMessage = "Name cannot be greater than 40 characters.")]
@@ -14,5 +16,9 @@
 
         [StringLength(100, ErrorMessage = "Email cannot be greater than 100 characters.")]
         public string Email { get; set; }
+
+        public string UserRole { get; set; }
+
+        public List<ProjectPassword> ProjectPasswords { get; set; }
     }
 }

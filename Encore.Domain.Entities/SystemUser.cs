@@ -1,4 +1,5 @@
-﻿namespace Encore.Domain.Entities
+﻿using System.Collections.Generic;
+namespace Encore.Domain.Entities
 {
     public class SystemUser : EntityBase, IAuthorizedUser
     {
@@ -9,5 +10,9 @@
         public string Password { get; set; }
 
         public string Salt { get; set; }
+
+        public UserRole UserRole { get; set; }
+
+        public List<ProjectPassword> ProjectPasswords { get; set; }
     }
 }

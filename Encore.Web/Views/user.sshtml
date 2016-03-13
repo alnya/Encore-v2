@@ -11,19 +11,24 @@
                 <h2 class="panel-title">Account Details</h2></div>
                 <div class="panel-body">
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div data-bind="template: { name: 'formFieldString', data: {Property: 'Name', Name: 'Name'} }"></div>
 						</div>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div data-bind="template: { name: 'formFieldString', data: {Property: 'Email', Name: 'Email'} }"></div>
+						</div>
+						<div class="col-sm-4">
+							<div data-bind="template: { name: 'formFieldList', data: {Property: 'UserRole', Name: 'Role', Caption: 'Select Role', Options: ['Admin', 'Standard']} }"></div>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div data-bind="template: { name: 'formFieldPassword', data: {Property: 'Password', Name: 'Password'} }"></div>
 						</div>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div data-bind="template: { name: 'formFieldPassword', data: {Property: 'PasswordConfirm', Name: 'Confirm Password'} }"></div>
+						</div>
+						<div class="col-sm-4">							
 						</div>
 					</div>
                 </div>
