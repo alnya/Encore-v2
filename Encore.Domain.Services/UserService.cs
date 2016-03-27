@@ -63,6 +63,7 @@
 
             updateUser.Name = user.Name;
             updateUser.Email = user.Email;
+            updateUser.ProjectTokens = user.ProjectTokens;
 
             if (!String.IsNullOrEmpty(user.Password) && user.Password != updateUser.Password)
             {
@@ -118,6 +119,23 @@
             }
 
             return null;
+        }
+
+        public void EnsureAdminUser()
+        {
+            var userRepo = context.GetRepository<SystemUser>();
+
+            if(!userRepo.Exists(x => x.UserRole == UserRole.Admin))
+            {
+                var defaultAdminUser = new SystemUser
+                {
+                    Name = "Administrator",
+                    Password = "T3rr1bl3Tr0ubl3",
+                    UserRole = UserRole.Admin
+                };
+
+                Add(defaultAdminUser);
+            }
         }
     }
 }

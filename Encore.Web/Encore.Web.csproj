@@ -102,7 +102,7 @@
     <Compile Include="Models\ReportDataSummary.cs" />
     <Compile Include="Models\ReportResultAvailable.cs" />
     <Compile Include="Models\Site.cs" />
-    <Compile Include="Models\ProjectPassword.cs" />
+    <Compile Include="Models\ProjectToken.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\PageModel.cs" />

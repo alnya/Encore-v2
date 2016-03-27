@@ -4,9 +4,9 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    [MapsFrom(typeof(Domain.Entities.ProjectPassword))]
-    [MapsTo(typeof(Domain.Entities.ProjectPassword))]
-    public class ProjectPassword
+    [MapsFrom(typeof(Domain.Entities.ProjectToken))]
+    [MapsTo(typeof(Domain.Entities.ProjectToken))]
+    public class ProjectToken
     {
         [Required]
         public Guid ProjectId { get; set; }
@@ -15,6 +15,6 @@
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Password is required."), StringLength(128, ErrorMessage = "Password cannot be greater than 128 characters.")]
-        public string Password { get; set; }
+        public string Token { get; set; }
     }
 }

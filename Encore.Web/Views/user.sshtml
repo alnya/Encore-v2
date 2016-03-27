@@ -33,10 +33,78 @@
 					</div>
                 </div>
             </div>
+			<div class="panel panel-default">
+                <div class="panel-heading">
+                <h2 class="panel-title">Project Authorization</h2></div>
+                <div class="panel-body">					
+					<table class="table">
+					<thead>
+						<tr>
+							<th>Project</th>
+							<th>UserName</th>
+						</tr>
+					</thead>
+					<tbody class="form-inline" data-bind='foreach: ProjectTokens'>
+						<tr>
+							<td><span class="form-control-static" data-bind="text: ProjectId"></span></td>
+							<td><span class="form-control-static" data-bind="text: UserName"></span></td>
+							<td>
+								<button id="editTokenButton" type="button" class="btn btn-default" data-bind="click: $parent.EditToken, visible: !$root.IsInMode('VIEW')">
+									<span class="glyphicon glyphicon-pencil"></span> Edit Authorization
+								</button>
+							</td>
+							<td>
+							  <button id="removeTokenButton" type="button" class="btn btn-danger" data-bind="click: $parent.RemoveToken, visible: !$root.IsInMode('VIEW')">X</button>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="6">
+								<button id="addTokenButton" type="button" class="btn btn-success" data-bind="click: AddToken, visible: !$root.IsInMode('VIEW')">Add Authorization</button>
+							</td>
+						</tr>
+					</tfoot>
+					</table>
+                </div>
+            </div>
         </div>
     </div>
 	@Partial['includes/_knockoutFormButtons.sshtml'];
 	@Partial['includes/BackButton.sshtml'];
+
+	<script type="text/html" id="projectTokenTemplate">
+      <div data-bind="with: ModalDialogTemplateData">
+          <div class="row">
+		     <div class="col-sm-6">
+                  <div id="ProjectName" class="form-group" data-bind="validationElement: ProjectId">
+                      <label class="control-label" for="ProjectName">Project</label>
+					  <select class="form-control" data-bind="options: Parent.Projects, optionsCaption: 'Select Project', optionsText:'Name', optionsValue:'Id', value:ProjectId"></select>
+                  </div>
+              </div>   
+              <div class="col-sm-6">
+                  <div id="UserName" class="form-group" data-bind="validationElement: UserName">
+                      <label class="control-label" for="UserName">Username</label>
+                      <input type="text" class="form-control" data-bind="value: UserName"/>
+                  </div>
+              </div>          
+          </div>
+          <div class="row">
+              <div class="col-sm-6">
+                  <div id="Token" class="form-group" data-bind="validationElement: Token">
+                      <label class="control-label" for="Token">Password</label>
+                      <input type="password" class="form-control" data-bind="value: Token"/>
+                  </div>
+              </div>
+			  <div class="col-sm-6">
+                  <div id="TokenConfirm" class="form-group" data-bind="validationElement: TokenConfirm">
+                      <label class="control-label" for="TokenConfirm">Confirm Passsword</label>
+                      <input type="password" class="form-control" data-bind="value: TokenConfirm"/>
+                  </div>
+              </div>
+          </div>          
+      </div>
+  </script>
 </form>
 
 <script type="text/javascript">

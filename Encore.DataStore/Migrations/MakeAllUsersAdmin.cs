@@ -24,7 +24,7 @@
                 document.Add("UserRole", 0);
             }
 
-            document.Add("ProjectPasswords", new BsonArray());
+            document.Add("ProjectTokens", new BsonArray());
 
             collection.Save(document);
         }

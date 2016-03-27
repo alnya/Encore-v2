@@ -10,5 +10,7 @@
         SystemUser AuthenticateUser(string name, string password);
 
         bool DeleteUser(Guid deletedByUserId, Guid userId);
+
+        void EnsureAdminUser();
     }
 }

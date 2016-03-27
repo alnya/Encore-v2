@@ -59,7 +59,7 @@
             }
 
             self.ShowModalDialog = function(isSmall, title, bodyText, template, templateData, okModalDismiss, okBtnIsVisible, okBtnAction, okBtnText, cancelBtnText) {
-                $('#aeModalDialog').modal('toggle');
+                $('#modalDialog').modal('toggle');
 
                 if (isSmall) {
                     self.ModalClass("modal fade bs-example-modal-sm");

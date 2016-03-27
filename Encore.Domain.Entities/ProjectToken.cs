@@ -6,13 +6,13 @@
     using System.Linq;
     using System.Text;
 
-    public class ProjectPassword
+    public class ProjectToken
     {
         [BsonId]
         public Guid ProjectId { get; set; }
 
         public string UserName { get; set; }
 
-        public string Password { get; set; }
+        public string Token { get; set; }
     }
 }

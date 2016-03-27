@@ -83,6 +83,7 @@
         protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
         {
             base.RequestStartup(container, pipelines, context);
+            EnsureAdminUser(container);
 
             pipelines.BeforeRequest.AddItemToEndOfPipeline(ctx =>
             {
@@ -93,6 +94,12 @@
 
                 return null;
             });
+        }
+                
+        private void EnsureAdminUser(TinyIoCContainer container)
+        {
+            var userService = container.Resolve<IUserService>();
+            userService.EnsureAdminUser();
         }
 
         private static void ConfigureAutoMapper()

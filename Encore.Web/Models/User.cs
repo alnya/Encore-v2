@@ -19,6 +19,6 @@
 
         public string UserRole { get; set; }
 
-        public List<ProjectPassword> ProjectPasswords { get; set; }
+        public List<ProjectToken> ProjectTokens { get; set; }
     }
 }
