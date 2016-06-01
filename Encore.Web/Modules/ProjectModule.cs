@@ -13,7 +13,7 @@
         private readonly IProjectService projectService;
 
         public ProjectModule(IProjectService projectService, IMappingEngine mappingEngine)
-            : base("data/projects", mappingEngine)
+            : base("data/projects", mappingEngine, UserRole.Admin)
         {
             this.projectService = projectService;
 

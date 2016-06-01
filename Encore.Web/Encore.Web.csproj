@@ -51,13 +51,11 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.1.2.0\lib\net40\Nancy.dll</HintPath>
+    <Reference Include="Nancy">
+      <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Hosting.Self, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.Hosting.Self.1.2.0\lib\net40\Nancy.Hosting.Self.dll</HintPath>
+    <Reference Include="Nancy.Hosting.Self">
+      <HintPath>..\packages\Nancy.Hosting.Self.1.4.1\lib\net40\Nancy.Hosting.Self.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.Sessions">
       <HintPath>..\packages\Nancy.Sessions.1.0.1\lib\4.5\Nancy.Sessions.dll</HintPath>
@@ -104,9 +102,11 @@
     <Compile Include="Models\ReportDataSummary.cs" />
     <Compile Include="Models\ReportResultAvailable.cs" />
     <Compile Include="Models\Site.cs" />
+    <Compile Include="Models\ProjectToken.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\PageModel.cs" />
+    <Compile Include="Modules\MyAccountModule.cs" />
     <Compile Include="Modules\UserModule.cs" />
     <Compile Include="Modules\AuthModule.cs">
       <SubType>Code</SubType>
@@ -137,7 +137,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Views\account.sshtml">
+    <None Include="Views\myAccount.sshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\user.sshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Views\createLogin.sshtml">
@@ -153,6 +156,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Views\errors\500.sshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\users.sshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Views\results.sshtml">
@@ -290,6 +296,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\viewmodels\home.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\viewmodels\myAccount.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\viewmodels\users.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\viewmodels\report.js">

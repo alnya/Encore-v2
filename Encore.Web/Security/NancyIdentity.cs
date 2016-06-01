@@ -15,7 +15,11 @@
 
         public IEnumerable<string> Claims
         {
-            get { return new List<string>(); }
+            get 
+            {
+                var role = authorizedUser.UserRole.ToString();
+                return new List<string> { role }; 
+            }
         }
 
         public string UserName

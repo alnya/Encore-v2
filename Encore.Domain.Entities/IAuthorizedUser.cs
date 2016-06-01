@@ -9,5 +9,7 @@
         string Name { get; }
 
         string Email { get; }
+
+        UserRole UserRole { get; }
     }
 }

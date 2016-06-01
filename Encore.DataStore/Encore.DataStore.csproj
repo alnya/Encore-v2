@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MapBsonClass.cs" />
+    <Compile Include="Migrations\MakeAllUsersAdmin.cs" />
     <Compile Include="Migrations\ChangeFieldProjectIdToString.cs" />
     <Compile Include="MongoContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

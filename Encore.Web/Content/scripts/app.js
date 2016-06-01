@@ -19,6 +19,7 @@
         'baseList': 'viewModels/baseList',
         'login': 'viewModels/login',
         'user': 'viewModels/user',
+        'myAccount': 'viewModels/myAccount',
         'project': 'viewModels/project',
         'report': 'viewModels/report',
         'setup': 'viewModels/setup',

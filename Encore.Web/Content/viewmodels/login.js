@@ -27,9 +27,6 @@
                         window.location.replace("/pages/");
                     }, function (errorResponse) { messageBox.ShowError("Login Failed: Incorrect details provided"); });
                 }
-            },
-            CreateAccount: function () {
-                location.href = "/login/create";
             }
         });
 

@@ -7,67 +7,101 @@
     using System;
     using System.Linq;
     using Extensions;
+    using Encore.Domain.Services.Search;
 
-    public class UserService : IUserService
+    public class UserService : EntityService<SystemUser>, IUserService
     {
         private readonly IRepositoryContext context;
 
         public UserService(IRepositoryContext context)
+            : base(context)
         {
             this.context = context;
         }
 
-        public SystemUser CreateUser(string name, string password, string email)
+        public override SystemUser Add(SystemUser user)
         {
-            var userRepo = context.GetRepository<SystemUser>();
+            if (String.IsNullOrWhiteSpace(user.Name) || String.IsNullOrWhiteSpace(user.Password))
+            {
+                throw new DomainException("Username and Password must be supplied");
+            }            
 
-            var foundUser = userRepo.GetWhere(x => x.Name.ToLowerInvariant() == name.ToLowerInvariant()).FirstOrDefault();
+            var userRepo = context.GetRepository<SystemUser>();
+            var foundUser = userRepo.GetWhere(x => x.Name.ToLowerInvariant() == user.Name.ToLowerInvariant()).FirstOrDefault();
 
             if (foundUser != null)
             {
                 throw new DomainException("Name already exists.");
             }
+            
+            user.Id = Guid.Empty;
+            user.Salt = BCrypt.Net.BCrypt.GenerateSalt();
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, user.Salt);
 
-            var newUser = new SystemUser
-            {
-                Name = name,
-                Email = email,
-                Salt = BCrypt.Net.BCrypt.GenerateSalt()
-            };
+            userRepo.Save(user);
 
-            newUser.Password = BCrypt.Net.BCrypt.HashPassword(password, newUser.Salt);
-            userRepo.Save(newUser);
-
-            return newUser;
+            return user;
         }
 
-        public SystemUser UpdateUser(Guid userId, string name, string password, string email)
+        public SystemUser UpdateUser(Guid updatedByUserId, Guid userId, SystemUser user)
         {
-            var userRepo = context.GetRepository<SystemUser>();
-            var systemUser = userRepo.Get(userId);
-            systemUser.ValidateNotNull<SystemUser>();
+            if (String.IsNullOrWhiteSpace(user.Name) || String.IsNullOrWhiteSpace(user.Password))
+            {
+                throw new DomainException("Username and Password must be supplied");
+            }    
 
-            if(userRepo.Exists(x => x.Name.ToLowerInvariant() == name.ToLowerInvariant() && x.Id != userId))
+            var userRepo = context.GetRepository<SystemUser>();
+            var updateUser = userRepo.Get(userId);
+            updateUser.ValidateNotNull<SystemUser>();
+
+            if (userRepo.Exists(x => x.Name.ToLowerInvariant() == user.Name.ToLowerInvariant() && x.Id != userId))
             {
                 throw new DomainException("Name already exists.");
             }
 
-            systemUser.Name = name;
-            systemUser.Email = email;
+            bool selfEdit = updatedByUserId == userId;
 
-            if (!String.IsNullOrEmpty(password) && password != systemUser.Password)
+            updateUser.Name = user.Name;
+            updateUser.Email = user.Email;
+            updateUser.ProjectTokens = user.ProjectTokens;
+
+            if (!String.IsNullOrEmpty(user.Password) && user.Password != updateUser.Password)
             {
-                systemUser.Password = BCrypt.Net.BCrypt.HashPassword(password, systemUser.Salt);
+                updateUser.Salt = BCrypt.Net.BCrypt.GenerateSalt();
+                updateUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, updateUser.Salt);
+            }
+            
+            if (!selfEdit)
+            {
+                if (updateUser.UserRole == UserRole.Admin && user.UserRole != UserRole.Admin && userRepo.Count(x => x.UserRole, UserRole.Admin) == 1)
+                {
+                    throw new DomainException("System requires at least 1 admin user.");
+                }
+
+                updateUser.UserRole = user.UserRole;
             }
 
-            userRepo.Save(systemUser);
-            return systemUser;
+            userRepo.Save(updateUser);
+            return updateUser;
         }
 
-        public SystemUser GetUser(Guid userId)
+        public virtual bool DeleteUser(Guid deletedByUserId, Guid userId)
         {
+            if (userId == deletedByUserId)
+            {
+                throw new DomainException("User cannot delete themselves.");
+            }
+            
             var userRepo = context.GetRepository<SystemUser>();
-            return userRepo.Get(userId);
+
+            if (userRepo.Count(x => x.UserRole, UserRole.Admin) == 1 && userRepo.Exists(x => x.Id == userId && x.UserRole == UserRole.Admin))
+            {
+                throw new DomainException("System requires at least 1 admin user.");
+            }
+
+            userRepo.DeleteWhere(x => x.Id == userId);
+
+            return true;
         }
 
         public SystemUser AuthenticateUser(string name, string password)
@@ -85,6 +119,23 @@
             }
 
             return null;
+        }
+
+        public void EnsureAdminUser()
+        {
+            var userRepo = context.GetRepository<SystemUser>();
+
+            if(!userRepo.Exists(x => x.UserRole == UserRole.Admin))
+            {
+                var defaultAdminUser = new SystemUser
+                {
+                    Name = "Administrator",
+                    Password = "T3rr1bl3Tr0ubl3",
+                    UserRole = UserRole.Admin
+                };
+
+                Add(defaultAdminUser);
+            }
         }
     }
 }

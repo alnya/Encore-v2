@@ -1,9 +1,12 @@
 ﻿namespace Encore.Web.Modules
 {
     using AutoMapper;
+    using System.Linq;
     using Encore.Web.Models;
     using Extensions;
     using Nancy.Responses;
+    using System.Collections.Generic;
+    using Nancy;
 
     public class SecurePagesModule : BaseModule
     {
@@ -24,9 +27,13 @@
 
             Get["/projects/{id}"] = GetProject;
 
+            Get["/users"] = GetUsers;
+
+            Get["/users/{id}"] = GetUser;
+
             Get["/setup"] = GetSetup;
 
-            Get["/account"] = GetAccount;
+            Get["/myAccount"] = GetMyAccount;
 
             Get["/logout"] = args =>
             {
@@ -57,22 +64,62 @@
 
         private dynamic GetProjects(dynamic args)
         {
+            if(!IsAdminUser())
+            {
+                RespondWithUnauthorized();
+            }
+
             return View["list", Vm(args, "Projects")];
         }
 
         private dynamic GetProject(dynamic args)
         {
+            if (!IsAdminUser())
+            {
+                RespondWithUnauthorized();
+            }
+
             return View["project", Vm(args, "Project")];
+        }
+
+        private dynamic GetUsers(dynamic args)
+        {
+            if (!IsAdminUser())
+            {
+                RespondWithUnauthorized();
+            }
+
+            return View["list", Vm(args, "Users")];
+        }
+
+        private dynamic GetUser(dynamic args)
+        {
+            if (!IsAdminUser())
+            {
+                RespondWithUnauthorized();
+            }
+
+            return View["user", Vm(args, "User")];
         }
 
         private dynamic GetSetup(dynamic args)
         {
+            if (!IsAdminUser())
+            {
+                RespondWithUnauthorized();
+            }
+
             return View["setup", Vm(args, "Setup")];
         }
 
-        private dynamic GetAccount(dynamic args)
+        private dynamic GetMyAccount(dynamic args)
         {
-            return View["account", Vm(args, "User")];
+            return View["myAccount", Vm(args, "MyAccount")];
+        }
+
+        private bool IsAdminUser()
+        {
+            return Context.CurrentUser.Claims.Any(x => x == "Admin");
         }
 
         private PageModel Vm(dynamic args, string view)
@@ -89,12 +136,14 @@
                 vm.RecordId = args.id;
             }
 
-            var navPages = new dynamic[] 
+            var navPages = new List<dynamic> { new { Name = "Reports", Icon = "glyphicon-file" } };
+
+            if (IsAdminUser())
             {
-                new { Name = "Projects", Icon = "glyphicon-globe" }, 
-                new { Name = "Reports", Icon = "glyphicon-file" },
-                new { Name = "Setup", Icon = "glyphicon-cog" },
-            };
+                navPages.Add(new { Name = "Projects", Icon = "glyphicon-globe" });
+                navPages.Add(new { Name = "Users", Icon = "glyphicon-user" });
+                navPages.Add(new { Name = "Setup", Icon = "glyphicon-cog" });
+            }
 
             foreach (var navPage in navPages)
             {

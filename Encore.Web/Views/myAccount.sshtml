@@ -35,9 +35,9 @@
 </form>
 
 <script type="text/javascript">
-require(['knockout', 'baseForm', 'user'],
-    function(ko, baseForm, user) {
-		baseForm.Initialise(user());
+require(['knockout', 'baseForm', 'myAccount'],
+    function(ko, baseForm, myAccount) {
+		baseForm.Initialise(myAccount());
 });
 </script>
 

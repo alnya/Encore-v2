@@ -28,6 +28,11 @@
                 });
         }
 
+        public Negotiator RespondWithUnauthorized()
+        {
+            return Negotiate.WithStatusCode(HttpStatusCode.Unauthorized);
+        }
+
         protected TModel MapTo<TModel>(object entity)
         {
             return mappingEngine.Map<TModel>(entity);

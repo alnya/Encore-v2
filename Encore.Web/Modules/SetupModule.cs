@@ -15,7 +15,7 @@
         private readonly IFieldService fieldService;
 
         public SetupModule(IProjectService projectService, ISiteService siteService, IFieldService fieldService, IMappingEngine mappingEngine)
-            : base("data/setup", mappingEngine)
+            : base("data/setup", mappingEngine, UserRole.Admin)
         {
             this.projectService = projectService;
             this.siteService = siteService;

@@ -1,5 +1,5 @@
 ﻿<div id="modalDialogView">
-	<div style="display:none;" data-bind="css: ModalClass" id="aeModalDialog" tabindex="-1" role="dialog" aria-hidden="true">
+	<div style="display:none;" data-bind="css: ModalClass" id="modalDialog" tabindex="-1" role="dialog" aria-hidden="true">
 		<div data-bind="css: ModalDialogClass">
 		<div class="modal-content">
 			<div class="modal-header">

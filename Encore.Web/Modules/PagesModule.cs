@@ -12,9 +12,7 @@
         {
             Get["/"] = GetLogin;
 
-            Get["/login"] = GetLogin;
-
-            Get["/login/create"] = CreateLogin;     
+            Get["/login"] = GetLogin;  
         }
 
         private dynamic GetLogin(dynamic args)
@@ -22,11 +20,6 @@
             Context.ClearSession();
 
             return View["login", new PageModel { Title = "Login", ViewModel = "login"}];
-        }
-
-        private dynamic CreateLogin(dynamic args)
-        {
-            return View["createLogin", new PageModel { Title = "Create Account", ViewModel = "user" }];
         }
     }
 }

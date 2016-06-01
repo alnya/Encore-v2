@@ -2,15 +2,15 @@
 {
     using Encore.Domain.Entities;
     using System;
-    
-    public interface IUserService
+
+    public interface IUserService : IEntityService<SystemUser> 
     {
+        SystemUser UpdateUser(Guid updatedByUserId, Guid userId, SystemUser user);
+
         SystemUser AuthenticateUser(string name, string password);
 
-        SystemUser GetUser(Guid userId);
+        bool DeleteUser(Guid deletedByUserId, Guid userId);
 
-        SystemUser UpdateUser(Guid userId, string name, string password, string email);
-
-        SystemUser CreateUser(string name, string password, string email);
+        void EnsureAdminUser();
     }
 }
