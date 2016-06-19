@@ -25,6 +25,13 @@
         private IRepositoryContext repositoryContext;
         private IProvideFieldData poolPartyClient;
 
+        public static string RootDirectory { get; set; }
+
+        static Bootstrapper()
+        {
+            RootDirectory = System.IO.Path.GetDirectoryName(typeof(Bootstrapper).Assembly.Location);
+        }
+
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
             base.ApplicationStartup(container, pipelines);
@@ -106,6 +113,14 @@
         {
             var types = Assembly.GetExecutingAssembly().GetExportedTypes();
             AutoMapperConfiguration.Configure(Mapper.Configuration, types);
+        }
+
+        private sealed class DefaultRootPathProvider : IRootPathProvider
+        {
+            string IRootPathProvider.GetRootPath()
+            {
+                return Bootstrapper.RootDirectory;
+            }
         }
     }
 }
