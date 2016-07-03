@@ -32,6 +32,11 @@
             RootDirectory = System.IO.Path.GetDirectoryName(typeof(Bootstrapper).Assembly.Location);
         }
 
+        protected override IRootPathProvider RootPathProvider
+        {
+            get { return new DefaultRootPathProvider(); }
+        }
+
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
             base.ApplicationStartup(container, pipelines);
