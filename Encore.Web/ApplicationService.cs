@@ -16,7 +16,9 @@
 
             var uri = new Uri(ConfigurationManager.AppSettings["ServiceUrl"] ?? "http://+:8080");
 
-            host = new NancyHost(uri);
+            var configuration = new HostConfiguration() { UrlReservations = new UrlReservations() { CreateAutomatically = true } };
+
+            host = new NancyHost(configuration, uri);
             host.Start();
             log.Info("Application is running on " + uri);
         }
